@@ -102,7 +102,6 @@ const Login = () => {
                     </p>
 
                     {/* Social Login */}
-                    <div className="divider my-8 text-base-content/40">OR</div>
                     <SocialLogin />
                 </div>
             </div>
