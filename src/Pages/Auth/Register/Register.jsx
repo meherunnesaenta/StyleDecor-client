@@ -45,11 +45,9 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
-            {/* Subtle background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/10 pointer-events-none"></div>
+        <div className="min-h-screen  bg-gradient-to-br from-blue-500 to-blue-100  flex items-center justify-center px-4  pb-30">
 
-            <div className="card bg-base-100 w-full max-w-md shadow-2xl relative z-10">
+            <div className="card bg-base-100 w-full max-w-md shadow-2xl relative z-10 pt-20">
                 <div className="card-body p-8">
                     {/* Header */}
                     <div className="text-center mb-8">
