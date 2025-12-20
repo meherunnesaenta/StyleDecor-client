@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router';
-import useAuth from '../../../hooks/useAuth'; 
+import { NavLink, useNavigate } from 'react-router';
+import useAuth from '../../../hooks/useAuth';
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
@@ -12,12 +12,52 @@ const Navbar = () => {
             .catch(error => console.log(error));
     };
 
+    // Active style define করো (sage green background + white text)
+    const activeClass = "bg-primary text-white hover:text-white";
+    const inactiveClass = "hover:text-primary hover:bg-primary/10";
+
     const navLinks = (
         <>
-            <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
-            <li><Link to="/services" className="hover:text-primary transition-colors">Services</Link></li>
-            <li><Link to="/about" className="hover:text-primary transition-colors">About</Link></li>
-            <li><Link to="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
+            <li>
+                <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                        `px-4 py-2 rounded-lg transition-all font-medium ${isActive ? activeClass : inactiveClass}`
+                    }
+                >
+                    Home
+                </NavLink>
+            </li>
+            <li>
+                <NavLink
+                    to="/services"
+                    className={({ isActive }) =>
+                        `px-4 py-2 rounded-lg transition-all font-medium ${isActive ? activeClass : inactiveClass}`
+                    }
+                >
+                    Services
+                </NavLink>
+            </li>
+            <li>
+                <NavLink
+                    to="/about"
+                    className={({ isActive }) =>
+                        `px-4 py-2 rounded-lg transition-all font-medium ${isActive ? activeClass : inactiveClass}`
+                    }
+                >
+                    About
+                </NavLink>
+            </li>
+            <li>
+                <NavLink
+                    to="/contact"
+                    className={({ isActive }) =>
+                        `px-4 py-2 rounded-lg transition-all font-medium ${isActive ? activeClass : inactiveClass}`
+                    }
+                >
+                    Contact
+                </NavLink>
+            </li>
         </>
     );
 
@@ -37,25 +77,30 @@ const Navbar = () => {
                 </div>
 
                 {/* Logo & Brand */}
-                <Link to="/" className="flex items-center gap-2">
+                <NavLink to="/" className="flex items-center gap-2">
                     <div className="text-2xl font-bold text-primary">StyleDecor</div>
                     <span className="text-secondary text-sm hidden sm:block">✦ Elegant Living</span>
-                </Link>
+                </NavLink>
             </div>
 
             {/* Desktop menu */}
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1 text-lg font-medium">
+                <ul className="menu menu-horizontal px-1 gap-2">
                     {navLinks}
                 </ul>
             </div>
 
             <div className="navbar-end gap-4">
-                {/* Dashboard button (only if logged in) */}
+                {/* Dashboard button */}
                 {user && (
-                    <Link to="/dashboard" className="btn btn-primary text-white hidden sm:inline-flex">
+                    <NavLink 
+                        to="/dashboard" 
+                        className={({ isActive }) => 
+                            `btn ${isActive ? 'btn-primary text-primary' : 'btn-outline btn-primary '}   hidden sm:inline-flex`
+                        }
+                    >
                         Dashboard
-                    </Link>
+                    </NavLink>
                 )}
 
                 {/* User profile / Login */}
@@ -63,19 +108,22 @@ const Navbar = () => {
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="avatar online cursor-pointer">
                             <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                <img src={user.photoURL || 'https://i.ibb.co.com/0s7Y5Zn/user-placeholder.jpg'} alt="Profile" />
+                                <img 
+                                    src={user.photoURL || 'https://i.ibb.co/0s7Y5Zn/user-placeholder.jpg'} 
+                                    alt="Profile" 
+                                />
                             </div>
                         </div>
                         <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 mt-3 z-[1]">
                             <li className="px-4 py-2 text-center font-medium">{user.displayName || 'User'}</li>
-                            <li><Link to="/dashboard">My Dashboard</Link></li>
+                            <li><NavLink to="/dashboard">My Dashboard</NavLink></li>
                             <li><button onClick={handleLogout} className="text-error">Logout</button></li>
                         </ul>
                     </div>
                 ) : (
-                    <Link to="/login" className="btn btn-outline btn-primary">
+                    <NavLink to="/login" className="btn btn-outline btn-primary">
                         Login
-                    </Link>
+                    </NavLink>
                 )}
             </div>
         </div>
@@ -83,3 +131,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
