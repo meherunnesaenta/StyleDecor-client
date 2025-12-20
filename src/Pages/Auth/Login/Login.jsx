@@ -1,29 +1,63 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
-import { Link, useLocation, useNavigate } from 'react-router'; 
+import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from '../SocialLogin/SocialLogin';
+import toast from 'react-hot-toast'
 
 const Login = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const { signInUser } = useAuth();
+    const { register, handleSubmit, formState: { errors },getValues} = useForm();
+    const { signInUser, loading,sendPassResetEmail } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const [err, setErr] = useState('');
+    
 
     const handleLogin = (data) => {
         console.log('form data', data);
+        setErr('');
+
         signInUser(data.email, data.password)
             .then(result => {
                 console.log(result.user);
+                toast.success("Well done !!!");
                 navigate(location?.state || '/');
             })
             .catch(error => {
                 console.log(error);
+                setErr(error.message);
+                
+
             });
+
+
     };
 
+
+    const handleForgetPassword = () => {
+    const values = getValues();
+    const email = values.email?.trim();
+
+    if (!email) {
+        toast.error("First enter your email");
+        return;
+    }
+
+    sendPassResetEmail(email)
+        .then(() => {
+            toast.success("Check your email for reset link");
+        })
+        .catch(err => {
+            if (err.message.includes("user-not-found")) {
+                toast.error("There are no Account for this gmail");
+            } else {
+                toast.error("Something is wrong try again later");
+            }
+        });
+};
+
     return (
-        <div className="min-h-screen bg-base-200 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-base-200 flex items-center justify-center px-4 my-20">
             {/* Background subtle decoration feel */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/10 pointer-events-none"></div>
 
@@ -36,7 +70,7 @@ const Login = () => {
                         <p className="text-sm mt-1 text-base-content/60">Login to book your dream decoration</p>
 
                         {/* Subtle floral divider */}
-                        <div className="flex items-center justify-center mt-6">
+                        <div className="flex items-center justify-center mt-3">
                             <div className="border-t border-primary/20 w-20"></div>
                             <div className="mx-4 text-primary/40">✦</div>
                             <div className="border-t border-primary/20 w-20"></div>
@@ -44,7 +78,7 @@ const Login = () => {
                     </div>
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
+                    <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
                         {/* Email */}
                         <div>
                             <label className="label">
@@ -53,6 +87,7 @@ const Login = () => {
                             <input
                                 type="email"
                                 {...register('email', { required: true })}
+                                
                                 placeholder="your@email.com"
                                 className="input input-bordered w-full"
                             />
@@ -79,15 +114,24 @@ const Login = () => {
                         </div>
 
                         <div className="flex justify-between items-center">
-                            <a href="#" className="link link-hover text-secondary hover:text-secondary/80 text-sm">
-                                Forgot password?
-                            </a>
+                            <button
+                                type="button"
+                                onClick={handleForgetPassword}
+                                disabled={loading}
+                                className={`link link-hover text-secondary hover:text-secondary/80 text-sm '}`}
+                            >
+                                 'Forget password?'
+                            </button>
+
                         </div>
 
                         <button type="submit" className="btn btn-primary w-full mt-4 text-white">
                             Login
                         </button>
                     </form>
+                    {
+                        err && <p className='text-red-500'> {err}</p>
+                    }
 
                     {/* Register link */}
                     <p className="text-center mt-6 text-base-content/70">
