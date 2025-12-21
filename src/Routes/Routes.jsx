@@ -3,6 +3,11 @@ import RootLayout from "../Layout/RootLayout";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
+import ErrorPage from "../Pages/Error/ErrorPage";
+import PrivateRoute from "./PrivateRoute";
+import AuthLayout from "../Layout/AuthLayout";
+import DashboardLayout from "../Layout/DashboardLayout";
+import MyBookings from "../Pages/Dashboard/MyBooking/MyBookings";
 
 export const router = createBrowserRouter([
   {
@@ -13,16 +18,35 @@ export const router = createBrowserRouter([
         index: true,
         Component: Home
       },
-      {
-        path: "/login",
-        Component: Login,
-
-      },
-      {
-        path: "/register",
-        Component:Register,
-      }
 
     ],
   },
+    {
+    path: '/',
+    Component: AuthLayout,
+    children: [
+      {
+        path: '/login',
+        Component: Login
+      },
+      {
+        path: '/register',
+        Component: Register
+      }
+    ]
+  },
+    {
+    path: '/dashboard',
+    element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
+    children: [
+      { 
+        path: 'my-bookings',
+        Component: MyBookings
+      },
+    ] 
+  },
+  {
+    path: "*",
+    Component:ErrorPage
+  }
 ]);
