@@ -5,14 +5,12 @@ export const imageUpload = async imageData => {
   formData.append('image', imageData)
 
   const { data } = await axios.post(
-    `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
+    `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`,
     formData
   )
   return data?.data?.display_url
 }
 
-// upload image using cloudinary
-// example post endpoint: https://api.cloudinary.com/v1_1/<cloud name>/image/upload
 export const imageUploadCloudinary = async imageData => {
   const formData = new FormData()
   formData.append('file', imageData)

@@ -22,11 +22,11 @@ const AddServiceForm = () => {
     reset: mutationReset,
   } = useMutation({
     mutationFn: async (payload) => 
-      await axiosSecure.post('/services', payload),
+      await axiosSecure.post('/service', payload),
     onSuccess: (data) => {
       toast.success('Decoration service added successfully! 🎉');
       mutationReset();
-      navigate('/dashboard/manage-services');
+      navigate('/dashboard/manage-service');
     },
     onError: (error) => {
       toast.error('Failed to add service. Please try again.');
@@ -56,7 +56,6 @@ const AddServiceForm = () => {
     } = data;
     
     const imageFile = image[0];
-
     try {
       const imageUrl = await imageUpload(imageFile);
       
@@ -83,6 +82,7 @@ const AddServiceForm = () => {
         rating: 0,
         totalBookings: 0
       };
+      
 
       await mutateAsync(serviceData);
       reset();
