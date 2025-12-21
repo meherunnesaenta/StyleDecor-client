@@ -8,6 +8,9 @@ import PrivateRoute from "./PrivateRoute";
 import AuthLayout from "../Layout/AuthLayout";
 import DashboardLayout from "../Layout/DashboardLayout";
 import MyBookings from "../Pages/Dashboard/MyBooking/MyBookings";
+import BookService from "../BookService/BookService";
+import Profile from "../Pages/Dashboard/Profile/Profile";
+import ServiceAdd from "../Pages/Dashboard/Admin/ServiceAdd";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +20,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home
+      },
+      {
+        path: 'bookingService',
+        element: <PrivateRoute><BookService></BookService></PrivateRoute>,
       },
 
     ],
@@ -43,6 +50,14 @@ export const router = createBrowserRouter([
         path: 'my-bookings',
         Component: MyBookings
       },
+      {
+        path:'profile',
+        Component:Profile
+      },
+      {
+        path:'admin/servicesadd',
+        Component:ServiceAdd
+      }
     ] 
   },
   {
