@@ -12,6 +12,7 @@ import Profile from "../Pages/Dashboard/Profile/Profile";
 import ServiceAdd from "../Pages/Dashboard/Admin/ServiceAdd";
 import ServiceDetails from "../components/Home/ServiceDetails";
 import Service from "../components/Home/Service";
+import BookingSuccess from "../components/Home/BookingSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
        path: '/service/:id',
        Component: ServiceDetails
+      },
+      {
+        path: '/booking-success',
+        Component:BookingSuccess
       }
     ]
   },
