@@ -5,12 +5,13 @@ import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
 import ErrorPage from "../Pages/Error/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
-import AuthLayout from "../Layout/AuthLayout";
 import DashboardLayout from "../Layout/DashboardLayout";
 import MyBookings from "../Pages/Dashboard/MyBooking/MyBookings";
 import BookService from "../BookService/BookService";
 import Profile from "../Pages/Dashboard/Profile/Profile";
 import ServiceAdd from "../Pages/Dashboard/Admin/ServiceAdd";
+import ServiceDetails from "../components/Home/ServiceDetails";
+import Service from "../components/Home/Service";
 
 export const router = createBrowserRouter([
   {
@@ -23,15 +24,19 @@ export const router = createBrowserRouter([
       },
       {
         path: 'bookingService',
-        element: <PrivateRoute><BookService></BookService></PrivateRoute>,
+        element: <BookService></BookService>,
       },
-
-    ],
+      {
+        path: '/services',
+        Component: Service
+      },
+      {
+       path: '/service/:id',
+       Component: ServiceDetails
+      }
+    ]
   },
-    {
-    path: '/',
-    Component: AuthLayout,
-    children: [
+    
       {
         path: '/login',
         Component: Login
@@ -39,9 +44,7 @@ export const router = createBrowserRouter([
       {
         path: '/register',
         Component: Register
-      }
-    ]
-  },
+      },
     {
     path: '/dashboard',
     element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
