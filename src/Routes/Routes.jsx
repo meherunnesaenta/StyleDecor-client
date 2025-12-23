@@ -14,6 +14,8 @@ import ServiceDetails from "../components/Home/ServiceDetails";
 import Service from "../components/Home/Service";
 import BookingSuccess from "../components/Home/BookingSuccess";
 import DecoratorRequests from "../components/Dashboad/DecoratorRequest";
+import About from "../components/Home/About";
+import Contact from "../components/Home/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +42,14 @@ export const router = createBrowserRouter([
       {
         path: '/booking-success',
         Component:BookingSuccess
+      },
+      {
+        path:'/about',
+        Component:About
+      },
+      {
+        path:'/contact',
+        Component:Contact
       }
     ]
   },
