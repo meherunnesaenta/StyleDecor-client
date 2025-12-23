@@ -1,94 +1,64 @@
-import { useSearchParams, useLocation } from 'react-router';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import Confetti from 'react-confetti';
-import Container from '../Shared/Container';
-import Heading from '../Shared/Heading';
-import { FaCheckCircle } from 'react-icons/fa';
+import { Link, useSearchParams } from 'react-router'; 
+import { IoBagCheckOutline } from 'react-icons/io5';
 
 const BookingSuccess = () => {
   const [searchParams] = useSearchParams();
-  const location = useLocation();
-  const [showConfetti, setShowConfetti] = useState(true);
-
-  // Safe way: manually parse query params if hook fails (fallback)
-  const sessionId = searchParams.get('session_id') || 
-    new URLSearchParams(location.search).get('session_id');
+  const sessionId = searchParams.get('session_id');
+  const [isVerifying, setIsVerifying] = useState(true); 
 
   useEffect(() => {
     if (sessionId) {
-      console.log('Payment successful! Session ID:', sessionId);
+      
+      axios
+        .post(`${import.meta.env.VITE_API_URL}/payment-success`, { sessionId })
+        .then((response) => {
+          console.log('Booking confirmed:', response.data);
+          setIsVerifying(false);
+        })
+        .catch((error) => {
+          console.error('Verification failed:', error);
+          setIsVerifying(false);
+        });
+    } else {
+      setIsVerifying(false);
     }
-
-    const timer = setTimeout(() => setShowConfetti(false), 5000);
-    return () => clearTimeout(timer);
   }, [sessionId]);
 
   return (
-    <>
-      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={200} />}
-
-      <Container>
-        <div className="pt-20 pb-32 flex flex-col items-center justify-center min-h-[70vh]">
-          <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ duration: 0.6, type: 'spring', stiffness: 200 }}
-            className="mb-8"
-          >
-            <FaCheckCircle className="text-9xl text-green-500 drop-shadow-lg" />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="text-center"
-          >
-            <Heading
-              title="Booking & Payment Successful!"
-              subtitle="Thank you for your booking. We will contact you soon to confirm the details."
-              center
-            />
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="text-xl text-green-600 mt-8 font-medium"
-          >
-            Your service has been booked successfully!
-          </motion.p>
-
-          {sessionId && (
-            <motion.p
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.9, duration: 0.5 }}
-              className="text-sm text-gray-500 mt-6 bg-gray-100 px-4 py-2 rounded-full"
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      <div className="bg-white p-10 rounded-2xl shadow-lg text-center max-w-md w-full">
+        {isVerifying ? (
+          <>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+            <h1 className="text-2xl font-bold text-gray-700 mb-2">Verifying Booking...</h1>
+            <p className="text-gray-600">Please wait while we confirm your payment.</p>
+          </>
+        ) : (
+          
+          <>
+            <IoBagCheckOutline className="w-16 h-16 text-green-500 mx-auto mb-4" />
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+              Booking Successful!
+            </h1>
+            <p className="text-gray-600 mb-6">
+              Thank you for your booking. Your service is confirmed and payment processed.
+            </p>
+            <Link
+              to="/dashboard/my-bookings" // তোমার bookings list page
+              className="inline-block bg-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-primary-dark transition duration-300"
             >
-              Session ID: <span className="font-mono">{sessionId}</span>
-            </motion.p>
-          )}
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-            className="mt-10"
-          >
-            <a
-              href="/services"
-              className="inline-block px-8 py-3 bg-primary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:bg-primary-dark transition-all duration-300 transform hover:-translate-y-1"
-            >
-              Explore More Services
-            </a>
-          </motion.div>
-        </div>
-      </Container>
-    </>
+              Go to My Bookings
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
 export default BookingSuccess;
+
+
+

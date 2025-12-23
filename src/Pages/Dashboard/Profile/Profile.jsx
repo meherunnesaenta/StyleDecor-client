@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../../../firebase/firebase.init'; // তোমার firebase init path
+import { auth } from '../../../firebase/firebase.init'; 
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
 const Profile = () => {
-  const { user, updateUserProfile } = useAuth(); // updateUserProfile from AuthContext
+  const { user, updateUserProfile } = useAuth(); 
   const { role, roleLoading } = useRole();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newName, setNewName] = useState(user?.displayName || '');

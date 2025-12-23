@@ -6,3 +6,4 @@ npm i sweetalert2
 npm i clsx
 npm install @headlessui/react
 npm install react-confetti
+react-responsive-carousel

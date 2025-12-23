@@ -108,7 +108,7 @@ const Service = () => {
   return (
     <Container>
       <div className='pt-20 pb-8'>
-        <Heading 
+        <Heading text-primary
           title='Our Decoration Services'
           subtitle='Choose from a wide range of professional decoration services for any occasion'
           center={true}

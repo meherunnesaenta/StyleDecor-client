@@ -20,6 +20,7 @@ const BookingModal = ({ service, isOpen, closeModal }) => {
     serviceMode,
     description,
   } = service || {};
+  console.log(service)
 
   if (isOpen && !user) {
     Swal.fire({
@@ -38,33 +39,32 @@ const BookingModal = ({ service, isOpen, closeModal }) => {
 
     setLoading(true);
 
-    const bookingInfo = {
-      serviceId: _id,
-      serviceName: service_name,
-      serviceImage: image,
-      price: cost,
-      unit,
-      serviceMode,
-      description,
+    const usdPrice = Number((cost / 118).toFixed(2));
 
-      customer: {
-        name: user?.displayName || 'Guest',
-        email: user?.email,
-        photo: user?.photoURL || '',
-      },
+const bookingInfo = {
+  serviceId: _id,
+  serviceName: service_name,
+  serviceImage: image,
+  price: usdPrice,          // ✅ USD price
+  originalPriceBDT: cost,   // optional but useful
+  unit,
+  serviceMode,
+  description,
+  customer: {
+    name: user?.displayName || 'Guest',
+    email: user?.email,
+  },
+  bookingDate,
+  location,
+};
 
-      bookingDate,
-      location: location.trim(),
-      status: 'pending',
-      bookedAt: new Date().toISOString(),
-    };
+
 
     try {
-      // Stripe checkout session create করার endpoint
       const { data } = await axiosSecure.post('/create-booking-session', bookingInfo);
 
       if (data.url) {
-        // Stripe checkout page-এ redirect
+
         window.location.href = data.url;
       }
     } catch (err) {
@@ -108,9 +108,19 @@ const BookingModal = ({ service, isOpen, closeModal }) => {
               <span className="font-medium">Type:</span>
               <span>{serviceMode === 'on-site' ? 'On-site Service' : 'In-studio Consultation'}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="font-medium">Price:</span>
-              <span className="font-bold text-primary">৳{cost?.toLocaleString()} per {unit?.replace(/-/g, ' ')}</span>
+              <div className="text-right">
+                <span className="font-bold text-primary text-lg">
+                  ৳{cost?.toLocaleString()}
+                </span>
+                <span className="block text-sm text-gray-500">
+                  (Payment in USD: ${(cost / 118).toFixed(2)})
+                </span>
+                <span className="block text-xs text-gray-400">
+                  per {unit?.replace(/-/g, ' ')}
+                </span>
+              </div>
             </div>
             <div className="flex justify-between">
               <span className="font-medium">Customer:</span>

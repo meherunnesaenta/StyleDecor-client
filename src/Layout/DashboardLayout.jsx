@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CiDeliveryTruck } from 'react-icons/ci';
-import { FaCalendarAlt, FaMotorcycle, FaRegCreditCard, FaSignOutAlt, FaTasks, FaUserCog, FaUsers } from 'react-icons/fa';
+import { FaBoxOpen, FaCalendarAlt, FaChartBar, FaMotorcycle, FaRegCreditCard, FaSignOutAlt, FaTasks, FaUserCog, FaUsers } from 'react-icons/fa';
 import { Link, NavLink, Outlet } from 'react-router';
 import useRole from '../hooks/useRole';
 import useAuth from '../hooks/useAuth';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+import BecomeDecoratorModal from '../components/Seller/BecomeDecoratorModal';
 
 const DashboardLayout = () => {
+
     const { role } = useRole();
+    const axiosSecure = useAxiosSecure()
 
-  const { logOut } = useAuth();
+    const { logOut } = useAuth();
 
-  const handleLogout = () => {
-    logOut();
-  };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
+
+    const handleLogout = () => {
+        logOut();
+    };
 
     return (
         <div className="drawer lg:drawer-open ">
@@ -127,7 +136,7 @@ const DashboardLayout = () => {
                             <>
                                 <li className="mb-2">
                                     <NavLink
-                                        to="/dashboard/manage-services"
+                                        to="/services"
                                         className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary data-[active]:bg-primary data-[active]:text-white"
                                         data-tip="Manage Services"
                                     >
@@ -147,7 +156,7 @@ const DashboardLayout = () => {
                                 </li>
                                 <li className="mb-2">
                                     <NavLink
-                                        to="/dashboard/manage-bookings"
+                                        to="/dashboard/admin/servicesadd"
                                         className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary data-[active]:bg-primary data-[active]:text-white"
                                         data-tip="Manage Bookings"
                                     >
@@ -171,16 +180,14 @@ const DashboardLayout = () => {
                         {/* Settings */}
                         <li className="mt-auto mb-4">
                             <button
-                                className="is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary w-full text-left"
-                                data-tip="Settings"
+                                onClick={() => setIsModalOpen(true)}
+                                disabled={role === 'decorator'}
+                                className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all hover:bg-secondary/10 w-full text-left disabled:opacity-50"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="size-6 flex-shrink-0">
-                                    <path d="M20 7h-9"></path>
-                                    <path d="M14 17H5"></path>
-                                    <circle cx="17" cy="17" r="3"></circle>
-                                    <circle cx="7" cy="7" r="3"></circle>
-                                </svg>
-                                <span className="is-drawer-close:hidden font-medium">Settings</span>
+                                <svg /* icon */ className="size-6" />
+                                <span className="font-medium">
+                                    {role === 'decorator' ? 'You are a Decorator ✓' : 'Be a Decorator'}
+                                </span>
                             </button>
                         </li>
                         <li>
@@ -196,6 +203,12 @@ const DashboardLayout = () => {
                     </ul>
                 </div>
             </div>
+
+
+            <BecomeDecoratorModal
+        isOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+      />
         </div>
     );
 };
