@@ -1,0 +1,62 @@
+[
+  {
+    "region": "Dhaka Division",
+    "district": "Dhaka",
+    "city": "Dhaka",
+    "covered_area": ["Uttara", "Gulshan", "Banani", "Dhanmondi", "Mohammadpur", "Mirpur", "Bashundhara", "Baridhara", "Old Dhaka", "Motijheel"],
+    "status": "active",
+    "mapImage": "https://www.researchgate.net/publication/258516730/figure/fig1/AS:613921534779392@1523381708038/Location-of-Dhaka-Metropolitan-DMP-area-a-in-Bangladesh-and-b-in-Dhaka-City.png",
+    "longitude": 90.4125,
+    "latitude": 23.8103
+  },
+  {
+    "region": "Dhaka Division",
+    "district": "Gazipur",
+    "city": "Gazipur",
+    "covered_area": ["Tong i", "Gazipur Sadar", "Kaliakair", "Sreepur"],
+    "status": "active",
+    "mapImage": "https://www.turkey-visit.com/map/bangladesh/gazipur/Gazipur_map_Bangladesh.jpg",
+    "longitude": 90.3938,
+    "latitude": 23.9999
+  },
+  {
+    "region": "Chattogram Division",
+    "district": "Chattogram",
+    "city": "Chattogram",
+    "covered_area": ["Agrabad", "Halishahar", "Pahartali", "Khulshi", "Panchlaish"],
+    "status": "active",
+    "mapImage": "https://www.researchgate.net/publication/362894700/figure/fig1/AS:11431281256687595@1719561787179/Location-of-Chittagong-city-showing-significant-places-wards-water-bodies-and-rail.jpg",
+    "longitude": 91.8124,
+    "latitude": 22.3569
+  },
+  {
+    "region": "Rajshahi Division",
+    "district": "Rajshahi",
+    "city": "Rajshahi",
+    "covered_area": ["Rajshahi City Center", "Boalia", "Motihar"],
+    "status": "active",
+    "mapImage": "https://www.researchgate.net/publication/384785491/figure/fig1/AS:11431281283100461@1728652715836/Study-area-map-Rajshahi-district.jpg",
+    "longitude": 88.6043,
+    "latitude": 24.3745
+  },
+  {
+    "region": "Khulna Division",
+    "district": "Khulna",
+    "city": "Khulna",
+    "covered_area": ["Khulna City", "Sonadanga", "Khalishpur"],
+    "status": "active",
+    "mapImage": "https://www.researchgate.net/publication/354968142/figure/fig1/AS:1075272946302986@1633376456949/Location-map-of-Khulna-city-Bangladesh.png",
+    "longitude": 89.5511,
+    "latitude": 22.8456
+  },
+  {
+    "region": "Sylhet Division",
+    "district": "Sylhet",
+    "city": "Sylhet",
+    "covered_area": ["Sylhet City", "Zindabazar", "Amberkhana"],
+    "status": "planned",
+    "mapImage": "http://en.banglapedia.org/images/f/fb/SylhetDistrict.jpg",
+    "longitude": 91.8721,
+    "latitude": 24.8949
+  }
+]
