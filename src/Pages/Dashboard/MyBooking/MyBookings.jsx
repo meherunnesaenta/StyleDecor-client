@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Loading from '../../../components/Loading/Loading';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const MyBookings = () => {
   const { user } = useAuth();

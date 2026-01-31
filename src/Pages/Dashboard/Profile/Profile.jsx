@@ -70,7 +70,7 @@ const Profile = () => {
 
   return (
     <div className='flex justify-center items-center min-h-screen bg-base-200 px-4'>
-      <div className='bg-base-100 shadow-2xl rounded-2xl w-full max-w-2xl p-8'>
+      <div className='bg-base-100 shadow-2xl rounded-2xl  max-w-4xl p-8'>
         <div className='flex flex-col items-center'>
           <img
             alt='profile'
@@ -92,8 +92,8 @@ const Profile = () => {
                 <p className="text-sm text-base-content/60">Name</p>
                 <p className='text-lg font-bold text-primary'>{user?.displayName || 'N/A'}</p>
               </div>
-              <div>
-                <p className="text-sm text-base-content/60">Email</p>
+              <div >
+                <p className="text-sm text-base-content/60 ">Email</p>
                 <p className='text-lg font-bold text-primary'>{user?.email}</p>
               </div>
               <div>

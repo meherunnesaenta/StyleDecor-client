@@ -14,8 +14,33 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
   const [portfolio, setPortfolio] = useState('');
 
   const handleSubmit = async () => {
+    if (!user) {
+      toast.error('User not authenticated.');
+      return;
+    }
+
     if (!phone || !experience) {
       toast.error('Phone number and experience are required!');
+      return;
+    }
+
+    // Phone validation (Bangladesh format)
+    const phoneRegex = /^(\+8801[3-9]\d{8})$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error('Please enter a valid Bangladesh phone number (e.g., +8801XXXXXXXXX).');
+      return;
+    }
+
+    // Experience validation
+    const expNum = Number(experience);
+    if (isNaN(expNum) || expNum < 0 || expNum > 50) {
+      toast.error('Experience must be a number between 0 and 50 years.');
+      return;
+    }
+
+    // Portfolio validation (if provided)
+    if (portfolio && !portfolio.match(/^https?:\/\/.+/)) {
+      toast.error('Please enter a valid URL for portfolio.');
       return;
     }
 
@@ -26,12 +51,16 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
         email: user.email,
         name: user.displayName || 'Guest',
         phone,
-        experience: Number(experience),
+        experience: expNum,
         portfolio: portfolio.trim() || '',
       });
 
       if (res.data.success) {
         toast.success('Application submitted successfully! Admin will review it soon.');
+        // Reset form
+        setPhone('');
+        setExperience('');
+        setPortfolio('');
         closeModal();
       }
     } catch (err) {
@@ -74,10 +103,11 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
               <input
                 type="tel"
                 required
+                disabled={loading}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+8801XXXXXXXXX"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none disabled:bg-gray-100"
               />
             </div>
 
@@ -89,10 +119,11 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
                 type="number"
                 required
                 min="0"
+                disabled={loading}
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
                 placeholder="e.g. 3"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none disabled:bg-gray-100"
               />
             </div>
 
@@ -102,10 +133,11 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
               </label>
               <input
                 type="url"
+                disabled={loading}
                 value={portfolio}
                 onChange={(e) => setPortfolio(e.target.value)}
                 placeholder="https://yourportfolio.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none disabled:bg-gray-100"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Share your Behance, Instagram, or personal website
@@ -117,7 +149,7 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
             <button
               onClick={closeModal}
               disabled={loading}
-              className="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+              className="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition disabled:opacity-70"
             >
               Cancel
             </button>

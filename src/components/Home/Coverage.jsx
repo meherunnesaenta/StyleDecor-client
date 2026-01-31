@@ -131,11 +131,11 @@ const Coverage = () => {
           </form>
         </div>
 
-        <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-primary/10">
+        <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-primary/10 relative z-10">  {/* Added relative z-10 */}
           <MapContainer
             center={position}
             zoom={7}
-            scrollWheelZoom={true}
+            scrollWheelZoom={false}
             className="h-[600px] md:h-[700px] lg:h-[800px] w-full"
             ref={mapRef}
           >
