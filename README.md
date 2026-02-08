@@ -7,3 +7,5 @@ npm i clsx
 npm install @headlessui/react
 npm install react-confetti
 react-responsive-carousel
+npm install recharts
+npm install lucide-react

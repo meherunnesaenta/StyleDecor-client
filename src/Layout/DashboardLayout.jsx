@@ -38,6 +38,8 @@ const DashboardLayout = () => {
     };
 
     return (
+
+        <div>
         <div className="drawer">  {/* lg:drawer-open রিমুভ করা হয়েছে যাতে সব স্ক্রিনে টগল হয় */}
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content transition-all duration-300">  {/* transition যোগ করা */}
@@ -142,7 +144,7 @@ const DashboardLayout = () => {
                             <>
                                 <li className="mb-2">
                                     <NavLink
-                                        to="/dashboard/manage-services"  // Changed to dashboard route
+                                         to="/dashboard/admin/servicesadd" // Changed to dashboard route
                                         className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary data-[active]:bg-primary data-[active]:text-white"
                                     >
                                         <FaBoxOpen className="size-6 flex-shrink-0" />
@@ -160,7 +162,7 @@ const DashboardLayout = () => {
                                 </li>
                                 <li className="mb-2">
                                     <NavLink
-                                        to="/dashboard/admin/servicesadd"
+                                        to="/dashboard/admin/booking"
                                         className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary data-[active]:bg-primary data-[active]:text-white"
                                     >
                                         <FaCalendarAlt className="size-6 flex-shrink-0" />
@@ -169,7 +171,7 @@ const DashboardLayout = () => {
                                 </li>
                                 <li className="mb-2">
                                     <NavLink
-                                        to="/dashboard/analytics"
+                                        to="/dashboard/admin/analytics"
                                         className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary data-[active]:bg-primary data-[active]:text-white"
                                     >
                                         <FaChartBar className="size-6 flex-shrink-0" />
@@ -204,11 +206,12 @@ const DashboardLayout = () => {
                     </ul>
                 </div>
             </div>
-
+            
             <BecomeDecoratorModal
                 isOpen={isModalOpen}
                 closeModal={() => setIsModalOpen(false)}
             />
+        </div>
         </div>
     );
 };

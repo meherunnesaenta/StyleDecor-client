@@ -2,12 +2,14 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { IoBagCheckOutline, IoAlertCircleOutline } from 'react-icons/io5';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const BookingSuccess = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const [status, setStatus] = useState('verifying'); // verifying, success, error
   const [message, setMessage] = useState('');
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     if (!sessionId) {
@@ -18,11 +20,9 @@ const BookingSuccess = () => {
 
     setStatus('verifying');
 
-    axios.post(
-      `${import.meta.env.VITE_API_URL}/payment-success`,
-      { sessionId },
-      { withCredentials: true } 
-    ).then((response) => {
+    axiosSecure
+      .post('/payment-success', { sessionId })
+      .then((response) => {
         if (response.data.success) {
           setStatus('success');
           setMessage(response.data.message || 'Your booking is confirmed!');
@@ -32,9 +32,10 @@ const BookingSuccess = () => {
         console.error('Booking confirmation failed:', error);
         setStatus('error');
         setMessage(
-          error.response?.data?.message || 'Failed to confirm booking. Please contact support.'
+          error.response?.data?.message || 'Failed to confirm booking.'
         );
       });
+
   }, [sessionId]);
 
   return (

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router';
 
 const BookingModal = ({ service, isOpen, closeModal }) => {
   const { user } = useAuth();
@@ -45,8 +46,8 @@ const bookingInfo = {
   serviceId: _id,
   serviceName: service_name,
   serviceImage: image,
-  price: usdPrice,          // ✅ USD price
-  originalPriceBDT: cost,   // optional but useful
+  price: usdPrice,          
+  originalPriceBDT: cost,   
   unit,
   serviceMode,
   description,
@@ -71,7 +72,7 @@ const bookingInfo = {
       console.error(err);
       Swal.fire(
         'Error',
-        err.response?.data?.message || 'Failed to proceed to payment.',
+        err.response?.data?.message || 'Failed to booking service.',
         'error'
       );
     } finally {
@@ -169,13 +170,16 @@ const bookingInfo = {
               Cancel
             </button>
 
-            <button
-              onClick={handleBooking}
-              disabled={loading || !user}
-              className="px-8 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary-dark transition disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Processing...' : 'Proceed to Payment'}
-            </button>
+            <Link to="/dashboard/my-bookings">
+              <button
+                onClick={handleBooking}
+                disabled={loading || !user}
+                className="px-8 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary-dark transition disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Processing...' : 'Confirm Booking'}
+              </button>
+            </Link>
+            
           </div>
 
           {!user && (

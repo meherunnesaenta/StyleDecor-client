@@ -48,7 +48,6 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
 
     try {
       const res = await axiosSecure.post('/become-decorator', {
-        email: user.email,
         name: user.displayName || 'Guest',
         phone,
         experience: expNum,
@@ -161,7 +160,9 @@ const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
             >
               {loading ? 'Submitting...' : 'Submit Application'}
             </button>
+            
           </div>
+
         </DialogPanel>
       </div>
     </Dialog>

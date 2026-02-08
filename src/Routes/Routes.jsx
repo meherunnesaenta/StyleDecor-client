@@ -16,11 +16,15 @@ import BookingSuccess from "../components/Home/BookingSuccess";
 import DecoratorRequests from "../components/Dashboad/DecoratorRequest";
 import About from "../components/Home/About";
 import Contact from "../components/Home/Contact";
+import ManageBookings from "../Pages/Dashboard/Admin/ManageBookings";
+import PaymentHistory from "../Pages/Dashboard/Admin/PaymentHistory";
+import Analytics from "../Pages/Dashboard/Admin/Analytics";
+import EditPages from "../Pages/Dashboard/EditPages";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: RootLayout,
+    element: <RootLayout></RootLayout>,
     loader: () => fetch('/serviceCenters.json').then(res => res.json()),
     children: [
       {
@@ -38,6 +42,10 @@ export const router = createBrowserRouter([
       {
        path: '/service/:id',
        Component: ServiceDetails
+      },
+      {
+        path: '/bookings/edit/:id',
+        Component: EditPages
       },
       {
         path: '/booking-success',
@@ -78,6 +86,21 @@ export const router = createBrowserRouter([
         path:'admin/servicesadd',
         Component:ServiceAdd
       },
+      {
+        path:'admin/booking',
+        Component:ManageBookings
+      },
+      {
+        path:'admin/analytics',
+        Component:Analytics
+      },
+
+      {
+        path:'payment-history',
+        Component:PaymentHistory
+      },
+      
+      
       {
         path:'manage-decorators',
         Component:DecoratorRequests

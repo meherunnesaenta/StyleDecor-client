@@ -1,49 +1,58 @@
+// src/hooks/useAxiosSecure.jsx
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import { getAuth } from 'firebase/auth';
 import useAuth from './useAuth';
 import { useNavigate } from 'react-router';
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:3000'
-})
+  baseURL: 'http://localhost:3000',
+});
 
 const useAxiosSecure = () => {
-    const { user, logOut } = useAuth();
-    const navigate = useNavigate();
+  const { logOut } = useAuth();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        
-        const reqInterceptor = axiosSecure.interceptors.request.use(config => {
-            config.headers.Authorization = `Bearer ${user?.accessToken}`
-            return config
-        })
+  useEffect(() => {
+    const auth = getAuth();
 
-      
-        const resInterceptor = axiosSecure.interceptors.response.use((response) => {
-            return response;
-        }, (error) => {
-            console.log(error);
-
-            const statusCode = error.status;
-            if (statusCode === 401 || statusCode === 403) {
-                logOut()
-                    .then(() => {
-                        navigate('/login')
-                    })
-            }
-
-
-            return Promise.reject(error);
-        })
-
-        return () => {
-            axiosSecure.interceptors.request.eject(reqInterceptor);
-            axiosSecure.interceptors.response.eject(resInterceptor);
+    const requestInterceptor = axiosSecure.interceptors.request.use(
+      async (config) => {
+        try {
+          const token = await auth.currentUser?.getIdToken();
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log("Token attached →", config.url); // দেখবে কোন request-এ token যাচ্ছে
+          } else {
+            console.warn("No user logged in, no token attached");
+          }
+        } catch (err) {
+          console.error("Failed to get token:", err);
         }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-    }, [user, logOut, navigate])
+    const responseInterceptor = axiosSecure.interceptors.response.use(
+      (res) => res,
+      async (error) => {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          console.log("401/403 detected, logging out...");
+          await logOut();
+          navigate('/login');
+        }
+        return Promise.reject(error);
+      }
+    );
 
-    return axiosSecure;
+    return () => {
+      axiosSecure.interceptors.request.eject(requestInterceptor);
+      axiosSecure.interceptors.response.eject(responseInterceptor);
+    };
+  }, [logOut, navigate]);
+
+  return axiosSecure;
 };
 
 export default useAxiosSecure;

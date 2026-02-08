@@ -12,7 +12,7 @@ const Navbar = () => {
             .catch(error => console.log(error));
     };
 
-    // Active style define করো (sage green background + white text)
+
     const activeClass = "bg-primary text-white hover:text-white";
     const inactiveClass = "hover:text-primary hover:bg-primary/10";
 

@@ -61,7 +61,7 @@ const Login = () => {
             {/* Background subtle decoration feel */}
             
 
-            <div className="card bg-base-100 w-full max-w-md shadow-2xl relative z-10 pt-30">
+            <div className="card bg-base-100 w-full max-w-md shadow-2xl relative z-10 pt-5">
                 <div className="card-body p-8">
                     {/* Header */}
                     <div className="text-center mb-8">
