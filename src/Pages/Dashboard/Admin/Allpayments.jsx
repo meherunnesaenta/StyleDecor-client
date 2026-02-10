@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import Heading from "../../../components/Shared/Heading";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
-const PaymentHistory = () => {
+const Allpayments = () => {
   const [payments, setPayments] = useState([]);
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    axiosSecure.get("/my-payments")
+    axiosSecure.get("/admin/payments")
       .then(res => {
         console.log("Raw payment data from backend:", res.data);
         setPayments(res.data)
@@ -146,4 +146,4 @@ const PaymentHistory = () => {
   );
 };
 
-export default PaymentHistory;
+export default Allpayments;

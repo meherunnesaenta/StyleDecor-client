@@ -1,171 +1,274 @@
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { useState } from 'react';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
-import toast from 'react-hot-toast';
+import React from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
 
-const BecomeDecoratorModal = ({ isOpen, closeModal }) => {
+const BecomeDecoratorModal = () => {
+  const { register, handleSubmit, control, formState: { errors } } = useForm();
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [loading, setLoading] = useState(false);
 
-  const [phone, setPhone] = useState('');
-  const [experience, setExperience] = useState('');
-  const [portfolio, setPortfolio] = useState('');
+  const riderRegion = useWatch({ control, name: 'region' });
 
-  const handleSubmit = async () => {
-    if (!user) {
-      toast.error('User not authenticated.');
-      return;
-    }
+  
+  const serviceCenters = [
+    { region: "Dhaka Division", district: "Dhaka", city: "Dhaka", covered_area: ["Uttara", "Gulshan", "Banani", "Dhanmondi", "Mohammadpur", "Mirpur", "Bashundhara", "Baridhara"] },
+    { region: "Dhaka Division", district: "Gazipur", city: "Gazipur", covered_area: ["Tong i", "Gazipur Sadar", "Kaliakair", "Sreepur"] },
+    { region: "Chattogram Division", district: "Chattogram", city: "Chattogram", covered_area: ["Agrabad", "Halishahar", "Pahartali", "Khulshi"] },
+    { region: "Rajshahi Division", district: "Rajshahi", city: "Rajshahi", covered_area: ["Rajshahi City Center", "Boalia"] },
+    { region: "Khulna Division", district: "Khulna", city: "Khulna", covered_area: ["Khulna City", "Sonadanga"] },
+    { region: "Sylhet Division", district: "Sylhet", city: "Sylhet", covered_area: ["Sylhet City", "Zindabazar"] },
+  ];
 
-    if (!phone || !experience) {
-      toast.error('Phone number and experience are required!');
-      return;
-    }
+  const regions = [...new Set(serviceCenters.map(c => c.region))];
 
-    // Phone validation (Bangladesh format)
-    const phoneRegex = /^(\+8801[3-9]\d{8})$/;
-    if (!phoneRegex.test(phone)) {
-      toast.error('Please enter a valid Bangladesh phone number (e.g., +8801XXXXXXXXX).');
-      return;
-    }
-
-    // Experience validation
-    const expNum = Number(experience);
-    if (isNaN(expNum) || expNum < 0 || expNum > 50) {
-      toast.error('Experience must be a number between 0 and 50 years.');
-      return;
-    }
-
-    // Portfolio validation (if provided)
-    if (portfolio && !portfolio.match(/^https?:\/\/.+/)) {
-      toast.error('Please enter a valid URL for portfolio.');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const res = await axiosSecure.post('/become-decorator', {
-        name: user.displayName || 'Guest',
-        phone,
-        experience: expNum,
-        portfolio: portfolio.trim() || '',
-      });
-
-      if (res.data.success) {
-        toast.success('Application submitted successfully! Admin will review it soon.');
-        // Reset form
-        setPhone('');
-        setExperience('');
-        setPortfolio('');
-        closeModal();
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error(err.response?.data?.message || 'Failed to submit application');
-    } finally {
-      setLoading(false);
-    }
+  const districtsByRegion = (region) => {
+    if (!region) return [];
+    const filtered = serviceCenters.filter(c => c.region === region);
+    return [...new Set(filtered.map(d => d.district))];
   };
 
-  return (
-    <Dialog open={isOpen} onClose={closeModal} className="relative z-50">
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
+const handleDecoratorApplication = (data) => {
+  const applicationData = {
+    ...data,
+    email: user?.email,
+    name: user?.displayName || data.fullName,
+    appliedAt: new Date(),
+    status: 'pending'
+  };
 
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel
-          transition
-          className="w-full max-w-lg rounded-2xl bg-white p-8 shadow-2xl backdrop-blur-xl 
-                     duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+  console.log("Decorator Application:", applicationData);
+
+axiosSecure.post('/decorator', applicationData)
+  .then(res => {
+    if (res.data.success) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Application Submitted!",
+        text: "We will review and contact you soon.",
+        showConfirmButton: false,
+        timer: 3500
+      });
+    }
+  })
+  .catch(err => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Failed to Submit',
+      text: err?.response?.data?.message || 'Something went wrong.'
+    });
+  });
+}
+
+return (
+    <div className="p-6 md:p-12 bg-gray-50 min-h-screen">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+            Become a Professional Decorator
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Join StyleDecor and turn your creativity into beautiful spaces across Bangladesh.
+          </p>
+          <p className="text-lg text-primary font-medium mt-4">
+            We are looking for talented decorators in our active service areas!
+          </p>
+        </div>
+
+        {/* Form */}
+        <form 
+          onSubmit={handleSubmit(handleDecoratorApplication)} 
+          className="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-gray-100"
         >
-          <DialogTitle as="h3" className="text-2xl font-bold text-center text-gray-900 mb-6">
-            Become a Decorator
-          </DialogTitle>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Left Column - Personal & Contact */}
+            <fieldset className="space-y-6">
+              <legend className="text-2xl font-semibold text-primary mb-6">
+                Personal Information
+              </legend>
 
-          <div className="text-center mb-8">
-            <p className="text-gray-600 leading-relaxed">
-              Join our talented team of interior decorators! Share your expertise and help clients create beautiful spaces.
-            </p>
-            <p className="text-sm text-gray-500 mt-3">
-              Your application will be reviewed by admin within 24-48 hours.
-            </p>
+              {/* Full Name */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Full Name</span>
+                </label>
+                <input
+                  type="text"
+                  {...register('fullName', { required: 'Full name is required' })}
+                  defaultValue={user?.displayName || ''}
+                  className="input input-bordered w-full"
+                  placeholder="Your full name"
+                />
+                {errors.fullName && <p className="text-error text-sm mt-1">{errors.fullName.message}</p>}
+              </div>
+
+              {/* Email (auto-filled) */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Email Address</span>
+                </label>
+                <input
+                  type="email"
+                  value={user?.email || ''}
+                  disabled
+                  className="input input-bordered w-full bg-gray-100 cursor-not-allowed"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Phone Number</span>
+                </label>
+                <input
+                  type="tel"
+                  {...register('phone', { 
+                    required: 'Phone is required',
+                    pattern: { value: /^(01[3-9]\d{8})$/, message: 'Invalid Bangladeshi number (11 digits)' }
+                  })}
+                  className="input input-bordered w-full"
+                  placeholder="01XXXXXXXXX"
+                />
+                {errors.phone && <p className="text-error text-sm mt-1">{errors.phone.message}</p>}
+              </div>
+
+              {/* Region (Service Area) */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Preferred Service Region</span>
+                </label>
+                <select 
+                  {...register('region', { required: 'Region is required' })}
+                  className="select select-bordered w-full"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Select your main working region</option>
+                  {regions.map((r, i) => (
+                    <option key={i} value={r}>{r}</option>
+                  ))}
+                </select>
+                {errors.region && <p className="text-error text-sm mt-1">{errors.region.message}</p>}
+              </div>
+
+              {/* District (Dynamic) */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Preferred District</span>
+                </label>
+                <select 
+                  {...register('district', { required: 'District is required' })}
+                  className="select select-bordered w-full"
+                  disabled={!riderRegion}
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    {riderRegion ? 'Select district' : 'Select region first'}
+                  </option>
+                  {riderRegion && districtsByRegion(riderRegion).map((d, i) => (
+                    <option key={i} value={d}>{d}</option>
+                  ))}
+                </select>
+                {errors.district && <p className="text-error text-sm mt-1">{errors.district.message}</p>}
+              </div>
+            </fieldset>
+
+            {/* Right Column - Professional Info */}
+            <fieldset className="space-y-6">
+              <legend className="text-2xl font-semibold text-primary mb-6">
+                Professional Details
+              </legend>
+
+              {/* Experience */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Years of Experience</span>
+                </label>
+                <input
+                  type="number"
+                  {...register('experience', { 
+                    required: 'Experience is required',
+                    min: { value: 0, message: 'Cannot be negative' }
+                  })}
+                  className="input input-bordered w-full"
+                  placeholder="e.g. 4"
+                />
+                {errors.experience && <p className="text-error text-sm mt-1">{errors.experience.message}</p>}
+              </div>
+
+              {/* Portfolio */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Portfolio Link (Website / Behance / Instagram)</span>
+                </label>
+                <input
+                  type="url"
+                  {...register('portfolio', { 
+                    required: 'Portfolio link is required',
+                    pattern: { value: /^(https?:\/\/)/, message: 'Must be a valid URL' }
+                  })}
+                  className="input input-bordered w-full"
+                  placeholder="https://your-portfolio.com"
+                />
+                {errors.portfolio && <p className="text-error text-sm mt-1">{errors.portfolio.message}</p>}
+              </div>
+
+              {/* Specialization */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Your Main Specialization</span>
+                </label>
+                <select 
+                  {...register('specialization', { required: 'Specialization is required' })}
+                  className="select select-bordered w-full"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Select your expertise</option>
+                  <option value="Residential">Residential Interior</option>
+                  <option value="Commercial">Commercial & Office</option>
+                  <option value="Event">Event & Wedding Decoration</option>
+                  <option value="Minimalist">Minimalist & Modern</option>
+                  <option value="Luxury">Luxury & Premium</option>
+                  <option value="Others">Others</option>
+                </select>
+                {errors.specialization && <p className="text-error text-sm mt-1">{errors.specialization.message}</p>}
+              </div>
+
+              {/* Bio */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">About Your Work / Experience</span>
+                </label>
+                <textarea
+                  {...register('bio', { 
+                    required: 'Please write something about yourself',
+                    minLength: { value: 50, message: 'At least 50 characters' }
+                  })}
+                  className="textarea textarea-bordered w-full h-32"
+                  placeholder="Describe your style, past projects, why you want to join StyleDecor..."
+                />
+                {errors.bio && <p className="text-error text-sm mt-1">{errors.bio.message}</p>}
+              </div>
+            </fieldset>
           </div>
 
-          <div className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone Number <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="tel"
-                required
-                disabled={loading}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+8801XXXXXXXXX"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none disabled:bg-gray-100"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Years of Experience <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                required
-                min="0"
-                disabled={loading}
-                value={experience}
-                onChange={(e) => setExperience(e.target.value)}
-                placeholder="e.g. 3"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none disabled:bg-gray-100"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Portfolio Link (Optional)
-              </label>
-              <input
-                type="url"
-                disabled={loading}
-                value={portfolio}
-                onChange={(e) => setPortfolio(e.target.value)}
-                placeholder="https://yourportfolio.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none disabled:bg-gray-100"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Share your Behance, Instagram, or personal website
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-8 flex justify-center gap-4">
-            <button
-              onClick={closeModal}
-              disabled={loading}
-              className="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition disabled:opacity-70"
+          {/* Submit */}
+          <div className="mt-12 text-center">
+            <button 
+              type="submit" 
+              className="btn btn-primary btn-lg px-16 text-white shadow-lg"
             >
-              Cancel
+              Submit Decorator Application
             </button>
-
-            <button
-              onClick={handleSubmit}
-              disabled={loading}
-              className="px-8 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary-dark transition disabled:opacity-70"
-            >
-              {loading ? 'Submitting...' : 'Submit Application'}
-            </button>
-            
+            <p className="text-sm text-gray-600 mt-4">
+              We review all applications carefully. Expect a response within 7-14 days.
+            </p>
           </div>
-
-        </DialogPanel>
+        </form>
       </div>
-    </Dialog>
+    </div>
   );
 };
 

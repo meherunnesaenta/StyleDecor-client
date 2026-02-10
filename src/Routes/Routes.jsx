@@ -20,6 +20,10 @@ import ManageBookings from "../Pages/Dashboard/Admin/ManageBookings";
 import PaymentHistory from "../Pages/Dashboard/Admin/PaymentHistory";
 import Analytics from "../Pages/Dashboard/Admin/Analytics";
 import EditPages from "../Pages/Dashboard/EditPages";
+import BecomeDecoratorModal from "../components/Seller/BecomeDecoratorModal";
+import Allpayments from "../Pages/Dashboard/Admin/Allpayments";
+import UserManagement from "../Pages/Dashboard/Admin/UserManagement";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -79,25 +83,37 @@ export const router = createBrowserRouter([
         Component: MyBookings
       },
       {
+        path:'become-decorator',
+        Component: BecomeDecoratorModal
+      },
+      {
         path:'profile',
         Component:Profile
       },
       {
         path:'admin/servicesadd',
-        Component:ServiceAdd
+        element:<AdminRoute><ServiceAdd></ServiceAdd></AdminRoute>
       },
       {
         path:'admin/booking',
-        Component:ManageBookings
+        element:<AdminRoute><ManageBookings></ManageBookings></AdminRoute>
       },
       {
         path:'admin/analytics',
-        Component:Analytics
+        element:<AdminRoute><Analytics></Analytics></AdminRoute>
       },
 
       {
         path:'payment-history',
         Component:PaymentHistory
+      },
+      {
+        path:'all-payment-history',
+        element:<AdminRoute><Allpayments></Allpayments></AdminRoute>
+      },
+      {
+        path:'admin/users-maanagement',
+        element:<UserManagement></UserManagement>
       },
       
       

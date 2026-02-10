@@ -26,7 +26,7 @@ const AddServiceForm = () => {
     onSuccess: (data) => {
       toast.success('Decoration service added successfully! 🎉');
       mutationReset();
-      navigate('/dashboard/manage-service');
+      navigate('/services');
     },
     onError: (error) => {
       toast.error('Failed to add service. Please try again.');

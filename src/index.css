@@ -21,9 +21,15 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 600;
 }
 
-/* Optional: Dark mode variant (যদি চাও তাহলে daisyUI dark enable করো) */
 .dark {
   --color-primary: 82 168 136;
   --color-base-100: 15 23 42;
   --color-base-content: 226 232 240;
+  --color-secondary: #0EA5E9;
+  --color-accent: #F472B6;
+  --color-neutral: #3D4451;
+  --color-info: #6366F1;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
 }

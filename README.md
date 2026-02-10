@@ -9,3 +9,4 @@ npm install react-confetti
 react-responsive-carousel
 npm install recharts
 npm install lucide-react
+npm i react-lottie
