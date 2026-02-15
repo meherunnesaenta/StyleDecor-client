@@ -3,6 +3,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import { useLoaderData} from 'react-router';
 
 const BecomeDecoratorModal = () => {
   const { register, handleSubmit, control, formState: { errors } } = useForm();
@@ -11,15 +12,10 @@ const BecomeDecoratorModal = () => {
 
   const riderRegion = useWatch({ control, name: 'region' });
 
-  
-  const serviceCenters = [
-    { region: "Dhaka Division", district: "Dhaka", city: "Dhaka", covered_area: ["Uttara", "Gulshan", "Banani", "Dhanmondi", "Mohammadpur", "Mirpur", "Bashundhara", "Baridhara"] },
-    { region: "Dhaka Division", district: "Gazipur", city: "Gazipur", covered_area: ["Tong i", "Gazipur Sadar", "Kaliakair", "Sreepur"] },
-    { region: "Chattogram Division", district: "Chattogram", city: "Chattogram", covered_area: ["Agrabad", "Halishahar", "Pahartali", "Khulshi"] },
-    { region: "Rajshahi Division", district: "Rajshahi", city: "Rajshahi", covered_area: ["Rajshahi City Center", "Boalia"] },
-    { region: "Khulna Division", district: "Khulna", city: "Khulna", covered_area: ["Khulna City", "Sonadanga"] },
-    { region: "Sylhet Division", district: "Sylhet", city: "Sylhet", covered_area: ["Sylhet City", "Zindabazar"] },
-  ];
+  const selectedDistrict = useWatch({ control, name: 'district' });
+
+  const serviceCenters = useLoaderData() || [];
+  console.log("Loaded Service Centers for Decorator Modal:", serviceCenters);
 
   const regions = [...new Set(serviceCenters.map(c => c.region))];
 
@@ -28,41 +24,47 @@ const BecomeDecoratorModal = () => {
     const filtered = serviceCenters.filter(c => c.region === region);
     return [...new Set(filtered.map(d => d.district))];
   };
-
-const handleDecoratorApplication = (data) => {
-  const applicationData = {
-    ...data,
-    email: user?.email,
-    name: user?.displayName || data.fullName,
-    appliedAt: new Date(),
-    status: 'pending'
+  const coveredAreasByDistrict = (district) => {
+    if (!district) return [];
+    const foundCenter = serviceCenters.find(c => c.district === district);
+    return foundCenter?.covered_area || [];
   };
 
-  console.log("Decorator Application:", applicationData);
 
-axiosSecure.post('/decorator', applicationData)
-  .then(res => {
-    if (res.data.success) {
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Application Submitted!",
-        text: "We will review and contact you soon.",
-        showConfirmButton: false,
-        timer: 3500
+  const handleDecoratorApplication = (data) => {
+    const applicationData = {
+      ...data,
+      email: user?.email,
+      name: user?.displayName || data.fullName,
+      appliedAt: new Date(),
+      status: 'pending'
+    };
+
+    console.log("Decorator Application:", applicationData);
+
+    axiosSecure.post('/decorator', applicationData)
+      .then(res => {
+        if (res.data.success) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Application Submitted!",
+            text: "We will review and contact you soon.",
+            showConfirmButton: false,
+            timer: 3500
+          });
+        }
+      })
+      .catch(err => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Submit',
+          text: err?.response?.data?.message || 'Something went wrong.'
+        });
       });
-    }
-  })
-  .catch(err => {
-    Swal.fire({
-      icon: 'error',
-      title: 'Failed to Submit',
-      text: err?.response?.data?.message || 'Something went wrong.'
-    });
-  });
-}
+  }
 
-return (
+  return (
     <div className="p-6 md:p-12 bg-gray-50 min-h-screen">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
@@ -79,8 +81,8 @@ return (
         </div>
 
         {/* Form */}
-        <form 
-          onSubmit={handleSubmit(handleDecoratorApplication)} 
+        <form
+          onSubmit={handleSubmit(handleDecoratorApplication)}
           className="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-gray-100"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -125,7 +127,7 @@ return (
                 </label>
                 <input
                   type="tel"
-                  {...register('phone', { 
+                  {...register('phone', {
                     required: 'Phone is required',
                     pattern: { value: /^(01[3-9]\d{8})$/, message: 'Invalid Bangladeshi number (11 digits)' }
                   })}
@@ -140,7 +142,7 @@ return (
                 <label className="label">
                   <span className="label-text font-medium">Preferred Service Region</span>
                 </label>
-                <select 
+                <select
                   {...register('region', { required: 'Region is required' })}
                   className="select select-bordered w-full"
                   defaultValue=""
@@ -156,9 +158,9 @@ return (
               {/* District (Dynamic) */}
               <div>
                 <label className="label">
-                  <span className="label-text font-medium">Preferred District</span>
+                  <span className="label-text font-medium">Preferred City</span>
                 </label>
-                <select 
+                <select
                   {...register('district', { required: 'District is required' })}
                   className="select select-bordered w-full"
                   disabled={!riderRegion}
@@ -173,6 +175,37 @@ return (
                 </select>
                 {errors.district && <p className="text-error text-sm mt-1">{errors.district.message}</p>}
               </div>
+              {/* Covered Area (Dynamic based on District) */}
+              <div>
+                <label className="label">
+                  <span className="label-text font-medium">Preferred Covered Area</span>
+                </label>
+
+                <select
+                  {...register('covered_area', { required: 'Covered area is required' })}
+                  className="select select-bordered w-full"
+                  disabled={!selectedDistrict}
+                  defaultValue=""
+                >
+                  <option value="" disabled>
+                    {selectedDistrict ? 'Select covered area' : 'Select district first'}
+                  </option>
+
+                  {selectedDistrict &&
+                    coveredAreasByDistrict(selectedDistrict).map((area, i) => (
+                      <option key={i} value={area}>
+                        {area}
+                      </option>
+                    ))}
+                </select>
+
+                {errors.covered_area && (
+                  <p className="text-error text-sm mt-1">
+                    {errors.covered_area.message}
+                  </p>
+                )}
+              </div>
+
             </fieldset>
 
             {/* Right Column - Professional Info */}
@@ -188,7 +221,7 @@ return (
                 </label>
                 <input
                   type="number"
-                  {...register('experience', { 
+                  {...register('experience', {
                     required: 'Experience is required',
                     min: { value: 0, message: 'Cannot be negative' }
                   })}
@@ -205,7 +238,7 @@ return (
                 </label>
                 <input
                   type="url"
-                  {...register('portfolio', { 
+                  {...register('portfolio', {
                     required: 'Portfolio link is required',
                     pattern: { value: /^(https?:\/\/)/, message: 'Must be a valid URL' }
                   })}
@@ -220,7 +253,7 @@ return (
                 <label className="label">
                   <span className="label-text font-medium">Your Main Specialization</span>
                 </label>
-                <select 
+                <select
                   {...register('specialization', { required: 'Specialization is required' })}
                   className="select select-bordered w-full"
                   defaultValue=""
@@ -242,7 +275,7 @@ return (
                   <span className="label-text font-medium">About Your Work / Experience</span>
                 </label>
                 <textarea
-                  {...register('bio', { 
+                  {...register('bio', {
                     required: 'Please write something about yourself',
                     minLength: { value: 50, message: 'At least 50 characters' }
                   })}
@@ -256,8 +289,8 @@ return (
 
           {/* Submit */}
           <div className="mt-12 text-center">
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn btn-primary btn-lg px-16 text-white shadow-lg"
             >
               Submit Decorator Application

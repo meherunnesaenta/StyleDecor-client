@@ -1,184 +1,186 @@
 import React, { useRef } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { useLoaderData } from 'react-router';
 
-// Fix marker icon for Vite
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
+// Fix default marker icon issue in Vite/React-Leaflet
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerRetina from 'leaflet/dist/images/marker-icon-2x.png';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: iconRetina,
-  iconUrl: icon,
-  shadowUrl: iconShadow,
+  iconRetinaUrl: markerRetina,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
 });
 
 const Coverage = () => {
-  const position = [23.6850, 90.3563];
+  const serviceCenters = useLoaderData() || [];
   const mapRef = useRef(null);
-
-  // তোমার data hardcode (public থেকে)
-  const serviceCenters = [
-    {
-      region: "Dhaka Division",
-      district: "Dhaka",
-      city: "Dhaka",
-      covered_area: ["Uttara", "Gulshan", "Banani", "Dhanmondi", "Mohammadpur", "Mirpur", "Bashundhara", "Baridhara", "Old Dhaka", "Motijheel"],
-      status: "active",
-      longitude: 90.4125,
-      latitude: 23.8103
-    },
-    {
-      region: "Dhaka Division",
-      district: "Gazipur",
-      city: "Gazipur",
-      covered_area: ["Tong i", "Gazipur Sadar", "Kaliakair", "Sreepur"],
-      status: "active",
-      longitude: 90.3938,
-      latitude: 23.9999
-    },
-    {
-      region: "Chattogram Division",
-      district: "Chattogram",
-      city: "Chattogram",
-      covered_area: ["Agrabad", "Halishahar", "Pahartali", "Khulshi", "Panchlaish"],
-      status: "active",
-      longitude: 91.8124,
-      latitude: 22.3569
-    },
-    {
-      region: "Rajshahi Division",
-      district: "Rajshahi",
-      city: "Rajshahi",
-      covered_area: ["Rajshahi City Center", "Boalia", "Motihar"],
-      status: "active",
-      longitude: 88.6043,
-      latitude: 24.3745
-    },
-    {
-      region: "Khulna Division",
-      district: "Khulna",
-      city: "Khulna",
-      covered_area: ["Khulna City", "Sonadanga", "Khalishpur"],
-      status: "active",
-      longitude: 89.5511,
-      latitude: 22.8456
-    },
-    {
-      region: "Sylhet Division",
-      district: "Sylhet",
-      city: "Sylhet",
-      covered_area: ["Sylhet City", "Zindabazar", "Amberkhana"],
-      status: "planned",
-      longitude: 91.8721,
-      latitude: 24.8949
+  console.log('Loaded service centers:', serviceCenters);
+  const FlyToLocation = ({ latLng, zoom }) => {
+    const map = useMap();
+    if (latLng) {
+      map.flyTo(latLng, zoom, { duration: 1.8 });
     }
-  ];
+    return null;
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    const location = e.target.location.value.trim().toLowerCase();
+    const query = e.target.location.value.trim().toLowerCase();
+    if (!query || !mapRef.current) return;
 
-    if (!location) return;
+    let target = null;
+    let zoom = 12;
 
-    const found = serviceCenters.find(center => 
-      center.district.toLowerCase().includes(location) ||
-      center.city.toLowerCase().includes(location) ||
-      center.covered_area.some(area => area.toLowerCase().includes(location))
-    );
+    for (const center of serviceCenters) {
+      // District match
+      if (center.district.toLowerCase().includes(query)) {
+        target = [center.latitude, center.longitude];
+        zoom = 11;
+        break;
+      }
 
-    if (found && mapRef.current) {
-      mapRef.current.flyTo([found.latitude, found.longitude], 12, {
-        duration: 2
-      });
+      // Covered area match
+      const areaMatch = center.covered_area.some(area =>
+        area.toLowerCase().includes(query)
+      );
+      if (areaMatch) {
+        target = [center.latitude, center.longitude];
+        zoom = 14;
+        break;
+      }
+
+      // City match
+      if (center.city?.toLowerCase().includes(query)) {
+        target = [center.latitude, center.longitude];
+        zoom = 13;
+        break;
+      }
+    }
+
+    if (target) {
+      mapRef.current.flyTo(target, zoom);
       e.target.location.value = '';
     } else {
-      alert('Sorry, this location is not in our service area yet!');
+      Swal.fire({
+        icon: 'info',
+        title: 'Not Found',
+        text: 'Sorry, we do not serve this location yet!',
+        timer: 3000,
+      });
     }
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Our Service Coverage in Bangladesh
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We are expanding rapidly to bring professional decoration services to your doorstep
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-base-200 to-base-100">
+      {/* Hero Section */}
+      <div className="hero bg-base-100 py-16 md:py-24 border-b border-base-300">
+        <div className="hero-content text-center">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Decoration Services Across Bangladesh
+            </h1>
+            <p className="text-xl md:text-2xl text-base-content/80 mb-10">
+              Available in {serviceCenters.length} districts — expanding every month
+            </p>
 
-        <div className="max-w-3xl mx-auto mb-12">
-          <form onSubmit={handleSearch} className="relative">
-            <input
-              type="search"
-              name="location"
-              placeholder="Search by city, district or area (e.g. Dhaka, Gulshan, Chattogram)"
-              className="w-full pl-14 pr-32 py-5 text-lg border-2 border-gray-300 rounded-2xl focus:border-primary focus:outline-none transition-all shadow-lg"
-            />
-            <svg className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <button
-              type="submit"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-primary text-white px-8 py-3 rounded-xl hover:bg-primary-dark transition font-semibold"
-            >
-              Search
-            </button>
-          </form>
-        </div>
-
-        <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-primary/10 relative z-10">  {/* Added relative z-10 */}
-          <MapContainer
-            center={position}
-            zoom={7}
-            scrollWheelZoom={false}
-            className="h-[600px] md:h-[700px] lg:h-[800px] w-full"
-            ref={mapRef}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-
-            {serviceCenters.map((center, index) => (
-              <Marker key={index} position={[center.latitude, center.longitude]}>
-                <Popup>
-                  <div className="p-4 text-center">
-                    <h3 className="text-xl font-bold text-primary">{center.city}</h3>
-                    <p className="text-sm text-gray-600 mt-1">District: {center.district}</p>
-                    <p className="text-sm text-gray-700 mt-2">
-                      Covered Areas: {center.covered_area.join(', ')}
-                    </p>
-                    <p className="text-sm font-semibold mt-3">
-                      Status: <span className={center.status === 'active' ? 'text-green-600' : 'text-orange-600'}>
-                        {center.status.charAt(0).toUpperCase() + center.status.slice(1)}
-                      </span>
-                    </p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-        </div>
-
-        <div className="text-center mt-12">
-          <div className="inline-flex flex-wrap justify-center gap-8 bg-white px-10 py-6 rounded-3xl shadow-xl">
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-green-500 rounded-full"></div>
-              <span className="text-gray-800 font-medium">Currently Active</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-orange-500 rounded-full"></div>
-              <span className="text-gray-800 font-medium">Coming Soon</span>
-            </div>
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+              <div className="join w-full">
+                <input
+                  type="search"
+                  name="location"
+                  placeholder="Search district, city or area (e.g. Dhaka, Gulshan, Chattogram)"
+                  className="input input-bordered join-item w-full text-lg py-7 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <button className="btn btn-primary join-item px-10 text-lg">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Search
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Map Section */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="card bg-base-100 shadow-2xl border border-base-300 rounded-3xl overflow-hidden">
+          <div className="card-body p-0">
+            <MapContainer
+              center={[23.6850, 90.3563]}
+              zoom={7}
+              scrollWheelZoom={true}
+              className="h-[70vh] md:h-[80vh] w-full"
+              ref={mapRef}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              {serviceCenters.map((center, idx) =>
+                center.covered_area.map((area, areaIdx) => {
+                  const offset = areaIdx * 0.008; // small offset to avoid overlap
+                  return (
+                    <Marker
+                      key={`${idx}-${areaIdx}`}
+                      position={[center.latitude + offset, center.longitude + offset]}
+                      eventHandlers={{
+                        click: () => {
+                          mapRef.current?.flyTo(
+                            [center.latitude, center.longitude],
+                            13,
+                            { duration: 1.5 }
+                          );
+                        }
+                      }}
+                    >
+                      <Popup className="custom-popup">
+                        <div className="p-3 min-w-[220px]">
+                          <h3 className="font-bold text-lg text-primary mb-2">{area}</h3>
+                          <p className="text-sm">
+                            <strong>District:</strong> {center.district}
+                          </p>
+                          <p className="text-sm">
+                            <strong>City:</strong> {center.city || 'N/A'}
+                          </p>
+                          <div className="mt-3 badge badge-outline badge-lg">
+                            {center.status === 'active' ? (
+                              <span className="text-success">Active ✓</span>
+                            ) : (
+                              <span className="text-warning">Coming Soon</span>
+                            )}
+                          </div>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  );
+                })
+              )}
+            </MapContainer>
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="flex flex-wrap justify-center gap-8 mt-10">
+          <div className="flex items-center gap-3 bg-base-100 px-6 py-4 rounded-2xl shadow-md">
+            <div className="w-5 h-5 bg-success rounded-full ring-2 ring-success/30"></div>
+            <span className="font-medium">Active Service Area</span>
+          </div>
+          <div className="flex items-center gap-3 bg-base-100 px-6 py-4 rounded-2xl shadow-md">
+            <div className="w-5 h-5 bg-warning rounded-full ring-2 ring-warning/30"></div>
+            <span className="font-medium">Coming Soon</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

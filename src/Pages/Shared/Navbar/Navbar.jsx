@@ -94,7 +94,7 @@ const Navbar = () => {
                 {/* Dashboard button */}
                 {user && (
                     <NavLink 
-                        to="/dashboard/profile" 
+                        to="/dashboard/home" 
                         className={({ isActive }) => 
                             `btn ${isActive ? 'btn-primary text-primary' : 'btn-outline btn-primary '}   hidden sm:inline-flex`
                         }

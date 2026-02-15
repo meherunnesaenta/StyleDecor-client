@@ -21,63 +21,116 @@ export default function UserManagement() {
     },
   });
 
-  const handleMakeAdmin = (user) => {
-    Swal.fire({
-      title: 'Make Admin?',
-      text: `Are you sure you want to make ${user.displayName || user.name || user.email} an Admin?`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Make Admin',
-      cancelButtonText: 'Cancel',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const roleInfo = { role: 'admin' };
-        axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
-          if (res.data?.modifiedCount > 0) {
-            refetch();
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: `${user.displayName || user.name || 'User'} is now Admin!`,
-              showConfirmButton: false,
-              timer: 1800,
-            });
-          }
-        });
-      }
-    });
-  };
+  const handleMakeDecorator = (user) => {
+  Swal.fire({
+    title: 'Make decorator?',
+    text: `Are you sure you want to make ${user.displayName || user.name || user.email} a decorator?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, Make Decorator',
+    cancelButtonText: 'Cancel',
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const roleRes = await axiosSecure.patch(`/users/${user._id}/role`, { role: 'decorator' });
 
-  const handleRemoveAdmin = (user) => {
-    Swal.fire({
-      title: 'Remove Admin?',
-      text: `Are you sure you want to remove admin role from ${user.displayName || user.name || user.email}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, Remove',
-      cancelButtonText: 'Cancel',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const roleInfo = { role: 'user' };
-        axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
-          if (res.data?.modifiedCount > 0) {
+        if (roleRes.data?.modifiedCount > 0) {
+          // ২. decorator collection-এ নতুন approved ডকুমেন্ট পোস্ট করো
+          const decoratorData = {
+            name: user.displayName || user.name || 'Unknown',
+            email: user.email,
+            phone: user.phone || null,
+            experience: 0,
+            portfolio: null,
+            region: null,
+            district: null,
+            specialization: null,
+            bio: null,
+            status: 'approved',
+            workStatus: 'available',
+            appliedAt: new Date(),
+            userId: user.userId || null,
+          };
+
+          const createRes = await axiosSecure.post('/decorator/admin-create', decoratorData);
+          console.log('Create decorator response:', createRes.data);
+
+          if (createRes.data?.success) {
             refetch();
             Swal.fire({
               position: 'top-end',
               icon: 'success',
-              title: `${user.displayName || user.name || 'User'} is no longer Admin`,
+              title: `${user.displayName || user.name || 'User'} is now a decorator!`,
               showConfirmButton: false,
               timer: 1800,
             });
+          } else {
+            throw new Error('Failed to create decorator entry');
           }
+        }
+      } catch (err) {
+        console.error('Make decorator error:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: err?.response?.data?.message || err.message || 'Something went wrong',
         });
       }
-    });
-  };
+    }
+  });
+};
+
+const handleRemoveDecorator = (user) => {
+  Swal.fire({
+    title: 'Remove Decorator?',
+    text: `Are you sure you want to remove decorator role from ${user.displayName || user.name || user.email}? This will delete their decorator profile.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, Remove & Delete',
+    cancelButtonText: 'Cancel',
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        // ১. users-এ role 'user' করো
+        const roleRes = await axiosSecure.patch(`/users/${user._id}/role`, { role: 'user' });
+
+        if (roleRes.data?.modifiedCount > 0) {
+          // ২. decorator delete (POST দিয়ে)
+          const deleteRes = await axiosSecure.post('/decorators/delete-by-email', {
+            email: user.email
+          });
+
+          console.log('Delete response:', deleteRes.data);
+
+          if (deleteRes.data?.success || deleteRes.data?.deletedCount > 0) {
+            refetch();
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Success!',
+              text: `${user.displayName || user.name || 'User'} is no longer a decorator. Profile deleted.`,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          } else {
+            throw new Error('Failed to delete decorator profile');
+          }
+        }
+      } catch (err) {
+        console.error('Remove decorator error:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: err?.response?.data?.message || err.message || 'Something went wrong',
+        });
+      }
+    }
+  });
+};
 
   if (isLoading) {
     return (
@@ -131,7 +184,7 @@ export default function UserManagement() {
               <th>User</th>
               <th>Email</th>
               <th>Role</th>
-              <th className="text-center">Make/Remove Admin</th>
+              <th className="text-center">Make/Remove Decorator</th>
               <th className="text-center">Actions</th>
             </tr>
           </thead>
@@ -169,31 +222,30 @@ export default function UserManagement() {
                   <td className="text-info">{user.email}</td>
                   <td>
                     <div
-                      className={`badge badge-lg font-semibold ${
-                        user.role === 'admin'
-                          ? 'badge-success'
-                          : user.role === 'moderator'
+                      className={`badge badge-lg font-semibold ${user.role === 'admin'
+                        ? 'badge-success'
+                        : user.role === 'moderator'
                           ? 'badge-info'
                           : 'badge-neutral'
-                      }`}
+                        }`}
                     >
                       {user.role ? user.role.toUpperCase() : 'USER'}
                     </div>
                   </td>
                   <td className="text-center">
-                    {user.role === 'admin' ? (
+                    {user.role === 'decorator' ? (
                       <button
-                        onClick={() => handleRemoveAdmin(user)}
+                        onClick={() => handleRemoveDecorator(user)}
                         className="btn btn-sm btn-outline btn-error tooltip tooltip-bottom"
-                        data-tip="Remove Admin"
+                        data-tip="Remove Decorator"
                       >
                         <FiShieldOff className="text-lg" />
                       </button>
                     ) : (
                       <button
-                        onClick={() => handleMakeAdmin(user)}
+                        onClick={() => handleMakeDecorator(user)}
                         className="btn btn-sm btn-outline btn-success tooltip tooltip-bottom"
-                        data-tip="Make Admin"
+                        data-tip="Make Decorator"
                       >
                         <FaUserShield className="text-lg" />
                       </button>

@@ -6,6 +6,7 @@ import { IoPersonRemoveSharp } from 'react-icons/io5';
 import { FaTrashCan } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 import Loading from '../Loading/Loading';
+import { Link } from 'react-router';
 
 const DecoratorRequests = () => {
   const axiosSecure = useAxiosSecure();
@@ -166,12 +167,13 @@ const DecoratorRequests = () => {
             <td>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 {/* View Details */}
-                <button
+                <Link
+                  to={`/dashboard/view-decorator/${request._id}`}
                   className="btn btn-sm btn-outline btn-info tooltip tooltip-bottom glass"
                   data-tip="View Details"
                 >
                   <FaEye className="text-lg transition-transform group-hover:scale-110" />
-                </button>
+                </Link>
 
                 {/* Approve */}
                 <button

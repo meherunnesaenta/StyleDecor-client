@@ -24,12 +24,38 @@ import BecomeDecoratorModal from "../components/Seller/BecomeDecoratorModal";
 import Allpayments from "../Pages/Dashboard/Admin/Allpayments";
 import UserManagement from "../Pages/Dashboard/Admin/UserManagement";
 import AdminRoute from "./AdminRoute";
+import AssignedProjects from "../Pages/Dashboard/Decorator/AssignedProjects";
+import DecoratorRoute from "./DecoratorRoute";
+import CompletedProjects from "../Pages/Dashboard/Decorator/CompletedProjects";
+import ViewDecorator from "../components/Admin/ViewDecorator";
+import Trackproduct from "../Pages/TrackProduct/Trackproduct";
+import Dashboard from "../Pages/Dashboard/Home/Dashboard";
+import DecoratorDashboardHome from "../Pages/Dashboard/Home/DecoratorDashboardHome";
+
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout></RootLayout>,
-    loader: () => fetch('/serviceCenters.json').then(res => res.json()),
+    loader: async () => {
+      try {
+        console.log("Trying to fetch /serviceCenters.json...");
+        const res = await fetch('/serviceCenters.json');
+        console.log("Fetch response status:", res.status);
+
+        if (!res.ok) {
+          console.error("Fetch failed with status:", res.status);
+          return [];
+        }
+
+        const data = await res.json();
+        console.log("Successfully loaded serviceCenters:", data);
+        return data;
+      } catch (err) {
+        console.error("Loader error while fetching serviceCenters:", err);
+        return [];
+      }
+    },
     children: [
       {
         index: true,
@@ -44,8 +70,8 @@ export const router = createBrowserRouter([
         Component: Service
       },
       {
-       path: '/service/:id',
-       Component: ServiceDetails
+        path: '/service/:id',
+        Component: ServiceDetails
       },
       {
         path: '/bookings/edit/:id',
@@ -53,78 +79,124 @@ export const router = createBrowserRouter([
       },
       {
         path: '/booking-success',
-        Component:BookingSuccess
+        Component: BookingSuccess
       },
       {
-        path:'/about',
-        Component:About
+        path: '/about',
+        Component: About
       },
       {
-        path:'/contact',
-        Component:Contact
-      }
+        path: '/contact',
+        Component: Contact,
+        loader: async () => {
+          try {
+            const res = await fetch('/serviceCenters.json');
+            if (!res.ok) throw new Error(`Failed to load: ${res.status}`);
+            const data = await res.json();
+            console.log("Coverage loader - loaded data:", data);
+            return data;
+          } catch (err) {
+            console.error("Coverage loader error:", err);
+            return [];
+          }
+        }
+      },
     ]
   },
-    
-      {
-        path: '/login',
-        Component: Login
-      },
-      {
-        path: '/register',
-        Component: Register
-      },
-    {
+
+
+  {
+    path: '/login',
+    Component: Login
+  },
+  {
+    path: '/register',
+    Component: Register
+  },
+  {
     path: '/dashboard',
     element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
     children: [
-      { 
+      {
+        index: true,
+        path:'home',
+        element:<Dashboard></Dashboard>
+      },
+      {
+        path: 'dashboard-home',
+        element:<DecoratorDashboardHome></DecoratorDashboardHome>
+      },
+      {
         path: 'my-bookings',
         Component: MyBookings
       },
       {
-        path:'become-decorator',
+        path: 'become-decorator',
+        loader: () => fetch("/serviceCenters.json"),
         Component: BecomeDecoratorModal
       },
       {
-        path:'profile',
-        Component:Profile
+        path: 'profile',
+        Component: Profile
       },
       {
-        path:'admin/servicesadd',
-        element:<AdminRoute><ServiceAdd></ServiceAdd></AdminRoute>
-      },
-      {
-        path:'admin/booking',
-        element:<AdminRoute><ManageBookings></ManageBookings></AdminRoute>
-      },
-      {
-        path:'admin/analytics',
-        element:<AdminRoute><Analytics></Analytics></AdminRoute>
+        path: 'admin/servicesadd',
+        element: <AdminRoute><ServiceAdd></ServiceAdd></AdminRoute>,
+
       },
 
       {
-        path:'payment-history',
-        Component:PaymentHistory
+        path: 'admin/booking',
+        element: <AdminRoute><ManageBookings></ManageBookings></AdminRoute>
       },
       {
-        path:'all-payment-history',
-        element:<AdminRoute><Allpayments></Allpayments></AdminRoute>
+        path: 'admin/analytics',
+        element: <AdminRoute><Analytics></Analytics></AdminRoute>
+      },
+
+      {
+        path: 'payment-history',
+        Component: PaymentHistory
       },
       {
-        path:'admin/users-maanagement',
-        element:<UserManagement></UserManagement>
+        path: 'all-payment-history',
+        element: <AdminRoute><Allpayments></Allpayments></AdminRoute>
       },
-      
-      
       {
-        path:'manage-decorators',
-        Component:DecoratorRequests
+        path: 'admin/users-maanagement',
+        element: <AdminRoute><UserManagement></UserManagement></AdminRoute>
+      },
+
+      {
+        path: 'view-decorator/:id',
+        element: <AdminRoute><ViewDecorator></ViewDecorator></AdminRoute>
+      },
+
+
+      {
+        path: 'manage-decorators',
+        element: <AdminRoute><DecoratorRequests></DecoratorRequests></AdminRoute>
+      },
+
+      {
+        path: 'completed-projects',
+        element: <DecoratorRoute><CompletedProjects></CompletedProjects></DecoratorRoute>
+      },
+
+      {
+        path: 'assigned-projects',
+        element: <DecoratorRoute><AssignedProjects></AssignedProjects></DecoratorRoute>
       }
-    ] 
+    ]
+
+  },
+
+  {
+    path: '/track-product/:trackingId',
+    Component: Trackproduct
   },
   {
     path: "*",
-    Component:ErrorPage
+    Component: ErrorPage
   }
 ]);

@@ -73,7 +73,7 @@ const MyBookings = () => {
   const handlePay = async (booking) => {
     try {
       const res = await axiosSecure.post('/create-stripe-session', {
-        bookingId: booking._id, // ← এটা পাঠাও
+        bookingId: booking._id, 
         serviceId: booking.serviceId,
         serviceName: booking.serviceName,
         serviceImage: booking.serviceImage,
@@ -173,6 +173,14 @@ const MyBookings = () => {
                         )}
                       </div>
                     </div>
+                  </td>
+                  <td className="px-6 py-5">
+                    <Link
+                      to={`/track-product/${booking._id}`}  
+                      className="btn btn-sm btn-outline btn-primary"
+                    >
+                      Track Product
+                    </Link>
                   </td>
 
                   <td className="px-6 py-5">

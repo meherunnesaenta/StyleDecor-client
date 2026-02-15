@@ -10,3 +10,6 @@ react-responsive-carousel
 npm install recharts
 npm install lucide-react
 npm i react-lottie
+npm install date-fns
+npm install chart.js
+npm install react-chartjs-2

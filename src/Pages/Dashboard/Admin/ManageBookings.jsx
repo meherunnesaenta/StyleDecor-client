@@ -59,7 +59,7 @@ const handleAssignDecorator = async (decorator) => {
     );
 
     if (assignRes.data?.modifiedCount > 0 || assignRes.data?.success) {
-      // ২. Decorator busy করা (ফেল করলেও booking assign হবে)
+      
       try {
         await axiosSecure.patch(`/decorators/${decorator._id}/work-status`, {
           workStatus: 'busy'

@@ -9,7 +9,7 @@ import BecomeDecoratorModal from '../components/Seller/BecomeDecoratorModal';
 
 const DashboardLayout = () => {
     const { role } = useRole();
-    // const axiosSecure = useAxiosSecure(); // Removed as unused
+    
 
     const { logOut } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,7 +20,7 @@ const DashboardLayout = () => {
 
         const handleChange = () => {
             if (checkbox.checked) {
-                drawerContent.classList.add('ml-64');  // সাইডবার width অনুসারে margin-left (w-64 = 16rem = 256px)
+                drawerContent.classList.add('ml-64');  
             } else {
                 drawerContent.classList.remove('ml-64');
             }
@@ -39,9 +39,9 @@ const DashboardLayout = () => {
     return (
 
         <div>
-            <div className="drawer">  {/* lg:drawer-open রিমুভ করা হয়েছে যাতে সব স্ক্রিনে টগল হয় */}
+            <div className="drawer">  
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-                <div className="drawer-content transition-all duration-300">  {/* transition যোগ করা */}
+                <div className="drawer-content transition-all duration-300">  
                     {/* Navbar */}
                     <nav className="navbar w-full bg-base-300">
                         <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost cursor-pointer">
@@ -51,7 +51,7 @@ const DashboardLayout = () => {
                                 <path d="M14 10l2 2l-2 2"></path>
                             </svg>
                         </label>
-                        <div className="px-4 text-xl font-bold text-primary">StyleDecor Dashboard</div>
+                        <div className="px-4 text-xl font-bold text-primary flex ">StyleDecor Dashboard <div className='text-green-500 pl-3'>{role}</div></div>
                     </nav>
                     {/* Page content here */}
                     <Outlet />
@@ -77,7 +77,7 @@ const DashboardLayout = () => {
                             </li>
 
                             {/* User Dashboard Links */}
-                            {role !== 'admin' && (
+                            {role === 'user' && (
                                 <li className="mb-2">
                                     <NavLink
                                         to="/dashboard/my-bookings"
@@ -88,7 +88,7 @@ const DashboardLayout = () => {
                                     </NavLink>
                                 </li>
                             )}
-                            {role !== 'admin' && (
+                            {role === 'user' && (
                                 <li className="mb-2">
                                     <NavLink
                                         to="/dashboard/payment-history"
@@ -123,7 +123,7 @@ const DashboardLayout = () => {
                                     </li>
                                     <li className="mb-2">
                                         <NavLink
-                                            to="/dashboard/today-schedule"
+                                            to="/dashboard/dashboard-home"
                                             className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary data-[active]:bg-primary data-[active]:text-white"
                                         >
                                             <FaCalendarAlt className="size-6 flex-shrink-0" />
@@ -132,7 +132,7 @@ const DashboardLayout = () => {
                                     </li>
                                     <li className="mb-2">
                                         <NavLink
-                                            to="/dashboard/earnings"
+                                            to="/dashboard/completed-projects"
                                             className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-secondary/10 hover:text-secondary data-[active]:bg-primary data-[active]:text-white"
                                         >
                                             <FaChartBar className="size-6 flex-shrink-0" />
