@@ -10,9 +10,9 @@ const TopDecoratorsSection = () => {
     data: decorators = [],
     isLoading,
   } = useQuery({
-    queryKey: ['top-decorators'],
+    queryKey: ['decorators'],
     queryFn: async () => {
-      const { data } = await axiosPublic.get('/top-decorators');
+      const { data } = await axiosPublic.get('/decorators');
       return data;
     },
   });
@@ -71,12 +71,7 @@ const TopDecoratorsSection = () => {
                 <p className="text-gray-600 text-sm mb-4">
                   {decorator.experience} Years Experience
                 </p>
-                <Link
-                  to={`/decorator/${decorator.email}`} // অথবা _id
-                  className="inline-block bg-primary text-white font-semibold px-8 py-3 rounded-xl hover:bg-primary-dark transition"
-                >
-                  View Profile
-                </Link>
+
               </div>
             </div>
           ))}

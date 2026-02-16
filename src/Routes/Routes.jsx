@@ -113,6 +113,7 @@ export const router = createBrowserRouter([
     path: '/register',
     Component: Register
   },
+  
   {
     path: '/dashboard',
     element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
