@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn, FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
+import { Logo } from '../../../components/Logo/Logo';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -13,7 +14,7 @@ const Footer = () => {
                     {/* Brand & Tagline */}
                     <div className="space-y-4">
                         <Link to="/" className="flex items-center gap-2">
-                            <h3 className="text-3xl font-bold text-primary">StyleDecor</h3>
+                            <Logo></Logo>
                         </Link>
                         <p className="text-base-content/70 max-w-xs">
                             Transforming homes & ceremonies with elegant, timeless decoration solutions.
@@ -23,18 +24,33 @@ const Footer = () => {
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-xl font-semibold text-primary mb-4">Quick Links</h4>
-                        <ul className="space-y-3">
-                            <li><Link to="/" className="link link-hover text-base-content/80 hover:text-secondary">Home</Link></li>
-                            <li><Link to="/services" className="link link-hover text-base-content/80 hover:text-secondary">Services</Link></li>
-                            <li><Link to="/about" className="link link-hover text-base-content/80 hover:text-secondary">About Us</Link></li>
-                            <li><Link to="/contact" className="link link-hover text-base-content/80 hover:text-secondary">Contact</Link></li>
+                        <h4 className="text-xl font-playfair font-semibold text-primary mb-6">
+                            Quick Links
+                        </h4>
+                        <ul className="space-y-4">
+                            {['Home', 'Services', 'About', 'Contact'].map((item) => (
+                                <li key={item}>
+                                    <Link
+                                        to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                                        className="
+                      text-base-content/80 hover:text-primary 
+                      transition-colors duration-300 
+                      flex items-center gap-3 group
+                    "
+                                    >
+                                        <span className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-all duration-300" />
+                                        {item}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
                     {/* Contact Info */}
                     <div>
-                        <h4 className="text-xl font-semibold text-primary mb-4">Contact Us</h4>
+                        <h4 className="text-xl font-playfair font-semibold text-primary mb-6">
+                            Contact Us
+                        </h4>
                         <ul className="space-y-3 text-base-content/80">
                             <li className="flex items-center gap-3">
                                 <FaPhone className="text-secondary" />
@@ -53,7 +69,9 @@ const Footer = () => {
 
                     {/* Working Hours & Social */}
                     <div>
-                        <h4 className="text-xl font-semibold text-primary mb-4">Working Hours</h4>
+                        <h4 className="text-xl font-playfair font-semibold text-primary mb-6">
+                            Hours & Follow Us
+                        </h4>
                         <div className="flex items-start gap-3 text-base-content/80 mb-6">
                             <FaClock className="text-secondary mt-1" />
                             <div>

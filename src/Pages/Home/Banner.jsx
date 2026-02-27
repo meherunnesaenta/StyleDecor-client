@@ -2,9 +2,9 @@ import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { motion } from 'framer-motion';
-import { Link } from 'react-router';
+import { Link } from 'react-router'; 
 
-
+// Images (high-res luxury photos use করা উচিত)
 import banner1 from '../../assets/luxury.jpg';
 import banner2 from '../../assets/image.png';
 import banner3 from '../../assets/image2.png';
@@ -12,216 +12,215 @@ import banner4 from '../../assets/image3.png';
 
 const Banner = () => {
   return (
-    <div className="relative -mt-20">
+    <div className="relative -mt-20 overflow-hidden">
       <Carousel
-        autoPlay={true}
-        infiniteLoop={true}
+        autoPlay
+        infiniteLoop
         showThumbs={false}
         showStatus={false}
-        interval={6000}
-        transitionTime={1200}
-        stopOnHover={true}
-        swipeable={true}
-        emulateTouch={true}
+        showArrows={true}
+        interval={5500}
+        transitionTime={1000}
+        stopOnHover
+        swipeable
+        emulateTouch
         className="overflow-hidden"
       >
         {/* Slide 1 */}
-        <div className="relative h-[600px] md:h-[750px] lg:h-[850px]">
-          <img 
-            src={banner1} 
-            alt="Luxury Living Room" 
-            className="w-full h-full object-cover"
+        <div className="relative h-[580px] sm:h-[680px] md:h-[780px] lg:h-[880px] xl:h-[920px]">
+          <img
+            src={banner1}
+            alt="Luxury Living Room"
+            className="w-full h-full object-cover brightness-90"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-          
+          <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/45 to-black/30" />
+
           <motion.div
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            className="absolute top-1/2 left-8 md:left-16 transform -translate-y-1/2 max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.4 }}
+            className="absolute inset-0 flex items-center px-6 sm:px-12 md:px-16 lg:px-24"
           >
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 1 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl"
-            >
-              Transform Your Space with <span className="text-primary">Elegance</span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 1 }}
-              className="text-lg md:text-xl lg:text-2xl text-gray-200 mb-10 drop-shadow-lg"
-            >
-              Professional interior decoration services tailored to your unique style and vision.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link
-                to="/services"
-                className="inline-block bg-primary text-white font-bold text-lg md:text-xl px-10 py-5 rounded-xl shadow-2xl hover:bg-primary-dark transition-all duration-300"
-              >
-                Explore Services
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Slide 2 */}
-        <div className="relative h-[600px] md:h-[750px] lg:h-[850px]">
-          <img 
-            src={banner2} 
-            alt="Modern Bedroom" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/40 to-transparent" />
-          
-          <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2 }}
-            className="absolute top-1/2 right-8 md:right-16 transform -translate-y-1/2 max-w-2xl text-right"
-          >
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-2xl"
-            >
-              Create Your <span className="text-primary">Dream Bedroom</span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="text-lg md:text-xl lg:text-2xl text-gray-200 mb-10 drop-shadow-lg"
-            >
-              Relaxing, sophisticated, and perfectly designed for comfort and luxury.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1 }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <Link
-                to="/services"
-                className="inline-block bg-primary text-white font-bold text-lg md:text-xl px-10 py-5 rounded-xl shadow-2xl hover:bg-primary-dark transition-all"
-              >
-                Book Consultation
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Slide 3 */}
-        <div className="relative h-[600px] md:h-[750px] lg:h-[850px]">
-          <img 
-            src={banner3} 
-            alt="Elegant Dining" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-          
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5 }}
-            className="absolute inset-0 flex items-center justify-center text-center px-8"
-          >
-            <div className="max-w-5xl">
+            <div className="max-w-4xl">
               <motion.h1
-                initial={{ opacity: 0, y: 60 }}
+                initial={{ opacity: 0, y: 70 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 1.2 }}
-                className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 drop-shadow-3xl"
+                transition={{ delay: 0.4, duration: 1.1, ease: "easeOut" }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight drop-shadow-2xl"
               >
-                Where Design Meets <span className="text-primary">Comfort</span>
+                Elevate Your Home with{" "}
+                <span className="text-primary">Timeless Elegance</span>
               </motion.h1>
-              
+
               <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-                className="text-xl md:text-2xl lg:text-3xl text-gray-200 mb-12 drop-shadow-lg"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 1 }}
+                className="mt-6 text-lg sm:text-xl md:text-2xl text-gray-100 max-w-3xl drop-shadow-lg"
               >
-                Expert decorators bringing timeless elegance to every corner of your home
+                Bespoke interior decoration services that blend sophistication, comfort, and your personal story.
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+                transition={{ delay: 1, duration: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                className="mt-10"
               >
                 <Link
                   to="/services"
-                  className="inline-block bg-white text-primary font-bold text-xl md:text-2xl px-12 py-6 rounded-2xl shadow-3xl hover:shadow-4xl transition-all duration-300"
+                  className="inline-flex items-center bg-primary text-white font-semibold text-lg md:text-xl px-10 py-5 rounded-2xl shadow-2xl hover:bg-secondary hover:shadow-3xl transition-all duration-400"
                 >
-                  Book Decoration Service
+                  Discover Our Services
                 </Link>
               </motion.div>
             </div>
           </motion.div>
         </div>
 
-        {/* Slide 4 */}
-        <div className="relative h-[600px] md:h-[750px] lg:h-[850px]">
-          <img 
-            src={banner4} 
-            alt="Contemporary Office" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-black/50" />
-          
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2 }}
-            className="absolute bottom-16 left-8 md:left-16 max-w-2xl"
-          >
-            <motion.h1
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-2xl"
-            >
-              Professional Spaces, <span className="text-primary">Professional Results</span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="text-lg md:text-xl text-gray-200 mb-10 drop-shadow-lg"
-            >
-              From homes to offices – we create environments that inspire productivity and creativity.
-            </motion.p>
+        {/* Slide 2 – Bedroom */}
+        <div className="relative h-[580px] sm:h-[680px] md:h-[780px] lg:h-[880px] xl:h-[920px]">
+          <img src={banner2} alt="Modern Bedroom" className="w-full h-full object-cover brightness-90" />
+          <div className="absolute inset-0 bg-gradient-to-l from-black/65 via-black/45 to-black/30" />
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2 }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <Link
-                to="/services"
-                className="inline-block bg-primary text-white font-bold text-lg md:text-xl px-10 py-5 rounded-xl shadow-2xl hover:bg-primary-dark transition-all"
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.4 }}
+            className="absolute inset-0 flex items-center justify-end px-6 sm:px-12 md:px-16 lg:px-24"
+          >
+            <div className="max-w-4xl text-right">
+              <motion.h1
+                initial={{ opacity: 0, y: 70 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 1.1 }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight drop-shadow-2xl"
               >
-                View Portfolio
-              </Link>
-            </motion.div>
+                Design Your <span className="text-primary">Dream Sanctuary</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 1 }}
+                className="mt-6 text-lg sm:text-xl md:text-2xl text-gray-100 drop-shadow-lg"
+              >
+                Serene bedrooms crafted with luxury fabrics, perfect lighting, and calming aesthetics.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                className="mt-10 inline-block"
+              >
+                <Link
+                  to="/services"
+                  className="inline-flex items-center bg-primary text-white font-semibold text-lg md:text-xl px-10 py-5 rounded-2xl shadow-2xl hover:bg-secondary hover:shadow-3xl transition-all duration-400"
+                >
+                  Book Your Consultation
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Slide 3 – Dining (Centered) */}
+        <div className="relative h-[580px] sm:h-[680px] md:h-[780px] lg:h-[880px] xl:h-[920px]">
+          <img src={banner3} alt="Elegant Dining" className="w-full h-full object-cover brightness-90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/50 to-transparent" />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5 }}
+            className="absolute inset-0 flex items-center justify-center text-center px-6 sm:px-12"
+          >
+            <div className="max-w-5xl">
+              <motion.h1
+                initial={{ opacity: 0, y: 80 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 1.2 }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-8 drop-shadow-3xl"
+              >
+                Where Every Moment Feels <span className="text-primary">Extraordinary</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 1 }}
+                className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-12 drop-shadow-lg max-w-4xl mx-auto"
+              >
+                Breathtaking dining spaces that turn meals into cherished memories.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1, duration: 0.9 }}
+                whileHover={{ scale: 1.08 }}
+                className="inline-block"
+              >
+                <Link
+                  to="/services"
+                  className="inline-flex items-center bg-white text-primary font-bold text-lg md:text-xl px-12 py-6 rounded-2xl shadow-3xl hover:bg-secondary hover:text-white hover:shadow-4xl transition-all duration-400"
+                >
+                  Reserve Your Vision
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Slide 4 – Office */}
+        <div className="relative h-[580px] sm:h-[680px] md:h-[780px] lg:h-[880px] xl:h-[920px]">
+          <img src={banner4} alt="Contemporary Office" className="w-full h-full object-cover brightness-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/30" />
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.4 }}
+            className="absolute inset-0 flex items-center px-6 sm:px-12 md:px-16 lg:px-24"
+          >
+            <div className="max-w-4xl">
+              <motion.h1
+                initial={{ opacity: 0, y: 70 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 1.1 }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight drop-shadow-2xl"
+              >
+                Spaces That <span className="text-primary">Inspire</span> Excellence
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 1 }}
+                className="mt-6 text-lg sm:text-xl md:text-2xl text-gray-100 drop-shadow-lg"
+              >
+                Modern offices designed for focus, collaboration, and professional pride.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                className="mt-10 inline-block"
+              >
+                <Link
+                  to="/services"
+                  className="inline-flex items-center bg-primary text-white font-semibold text-lg md:text-xl px-10 py-5 rounded-2xl shadow-2xl hover:bg-secondary hover:shadow-3xl transition-all duration-400"
+                >
+                  See Our Portfolio
+                </Link>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </Carousel>

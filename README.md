@@ -8,7 +8,7 @@ It helps local decoration businesses manage online bookings, decorator assignmen
 
 ## 🌐 Live Website
 Client: https://cheery-cranachan-6e2445.netlify.app/  
-Server: https://your-server-live-link.com  
+Server: https://style-decor-server-xi.vercel.app 
 
 ---
 

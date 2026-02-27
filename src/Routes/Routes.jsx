@@ -36,6 +36,7 @@ import DecoratorDashboardHome from "../Pages/Dashboard/Home/DecoratorDashboardHo
 export const router = createBrowserRouter([
   {
     path: "/",
+    id: "root",
     element: <RootLayout></RootLayout>,
     loader: async () => {
       try {
@@ -59,7 +60,20 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Home
+        Component: Home,
+          loader: async () => {
+          try {
+            const res = await fetch('/serviceCenters.json');
+            if (!res.ok) throw new Error(`Failed to load: ${res.status}`);
+            const data = await res.json();
+            console.log("Coverage loader - loaded data:", data);
+            return data;
+          } catch (err) {
+            console.error("Coverage loader error:", err);
+            return [];
+          }
+        }
+
       },
       {
         path: 'bookingService',
@@ -88,7 +102,7 @@ export const router = createBrowserRouter([
       {
         path: '/contact',
         Component: Contact,
-        loader: async () => {
+          loader: async () => {
           try {
             const res = await fetch('/serviceCenters.json');
             if (!res.ok) throw new Error(`Failed to load: ${res.status}`);
@@ -100,6 +114,7 @@ export const router = createBrowserRouter([
             return [];
           }
         }
+      
       },
     ]
   },

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import Loading from '../../components/Loading/Loading';
-import { Link } from 'react-router';
 import useAxiosPublic from '../../../public/useAxiosPublic';
 
 const TopDecoratorsSection = () => {
@@ -12,7 +11,7 @@ const TopDecoratorsSection = () => {
   } = useQuery({
     queryKey: ['decorators'],
     queryFn: async () => {
-      const { data } = await axiosPublic.get('/decorators');
+      const { data } = await axiosPublic.get('/decorators/top');
       return data;
     },
   });

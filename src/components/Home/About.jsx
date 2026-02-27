@@ -15,13 +15,13 @@ const About = () => {
 
         {/* Hero Image + Overlay Text */}
         <div className="relative rounded-3xl overflow-hidden shadow-2xl mb-20">
-          <img 
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
-            alt="StyleDecor Team" 
+          <img
+            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            alt="StyleDecor Team"
             className="w-full h-[500px] md:h-[600px] object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent" />
-          
+
           <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 text-white">
             <h3 className="text-3xl md:text-5xl font-bold mb-4">
               We Bring Your Vision to Life
@@ -61,9 +61,9 @@ const About = () => {
           </div>
 
           <div className="order-1 lg:order-2">
-            <img 
-              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
-              alt="StyleDecor Team Working" 
+            <img
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+              alt="StyleDecor Team Working"
               className="rounded-3xl shadow-2xl w-full"
             />
           </div>
@@ -103,15 +103,18 @@ const About = () => {
         </div>
 
         {/* CTA */}
-        <div className="text-center bg-gradient-to-r from-primary to-secondary rounded-3xl p-12 text-white shadow-2xl">
-          <h3 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Transform Your Space?
+        <div className="text-center bg-gradient-to-br from-primary to-secondary rounded-3xl p-12 md:p-16 shadow-2xl text-white">
+          <h3 className="text-4xl md:text-5xl font-bold mb-6">
+            Ready to Create Something Extraordinary?
           </h3>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Let our expert team create the perfect decoration for your home or event
+          <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-95">
+            Let our passionate team bring elegance, emotion, and perfection to your home or special occasion.
           </p>
-          <Link to='/services' className="btn btn-neutral btn-lg text-xl px-12 hover:scale-105 transition-transform">
-            Book Consultation Now
+          <Link
+            to="/services"
+            className="inline-block bg-white text-primary font-semibold text-xl px-12 py-5 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition-all duration-300"
+          >
+            Schedule Your Consultation
           </Link>
         </div>
       </div>

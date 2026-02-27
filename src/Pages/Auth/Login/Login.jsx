@@ -1,156 +1,161 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
 import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from '../SocialLogin/SocialLogin';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
+
+import universalIllustration from '../../../assets/login-illustration.png'; 
+import { Logo } from '../../../components/Logo/Logo';
+import Button from '../../../components/Shared/Button/Button';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Login = () => {
-    const { register, handleSubmit, formState: { errors },getValues} = useForm();
-    const { signInUser, loading,sendPassResetEmail } = useAuth();
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [err, setErr] = useState('');
-    
+  const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+  const { signInUser, loading, sendPassResetEmail } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [err, setErr] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-    const handleLogin = (data) => {
-        console.log('form data', data);
-        setErr('');
+  const handleLogin = (data) => {
+    setErr('');
+    signInUser(data.email, data.password)
+      .then(() => {
+        toast.success("Welcome back ");
+        navigate(location?.state || '/');
+      })
+      .catch(() => setErr("Invalid email or password"));
+  };
 
-        signInUser(data.email, data.password)
-            .then(result => {
-                console.log(result.user);
-                toast.success("Well done !!!");
-                navigate(location?.state || '/');
-            })
-            .catch(error => {
-                console.log(error);
-                setErr(error.message);
-                
-
-            });
-
-
-    };
-
-
-    const handleForgetPassword = () => {
-    const values = getValues();
-    const email = values.email?.trim();
-
+  const handleForgetPassword = () => {
+    const email = getValues().email?.trim();
     if (!email) {
-        toast.error("First enter your email");
-        return;
+      toast.error("Enter your email first");
+      return;
     }
-
     sendPassResetEmail(email)
-        .then(() => {
-            toast.success("Check your email for reset link");
-        })
-        .catch(err => {
-            if (err.message.includes("user-not-found")) {
-                toast.error("There are no Account for this gmail");
-            } else {
-                toast.error("Something is wrong try again later");
-            }
-        });
-};
+      .then(() => toast.success("Reset link sent to your email"))
+      .catch(() => toast.error("Something went wrong"));
+  };
 
-    return (
-        <div className="min-h-screen  bg-gradient-to-br from-blue-500 to-blue-100 flex items-center justify-center px-4  pb-40">
-            {/* Background subtle decoration feel */}
-            
+  return (
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gradient-to-br from-cyan-50 via-blue-100 to-indigo-100 relative overflow-hidden">
 
-            <div className="card bg-base-100 w-full max-w-md shadow-2xl relative z-10 pt-5">
-                <div className="card-body p-8">
-                    {/* Header */}
-                    <div className="text-center mb-8">
-                        <h2 className="text-4xl font-bold text-primary">StyleDecor</h2>
-                        <p className="text-xl mt-2 text-base-content/70">Welcome Back</p>
-                        <p className="text-sm mt-1 text-base-content/60">Login to book your dream decoration</p>
+      <div className="absolute -top-24 -left-24 w-96 h-96  rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-32 -right-16 w-[600px] h-[600px] bg-blue-400/25 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-indigo-300/20 rounded-full blur-3xl opacity-70"></div>
 
-                        {/* Subtle floral divider */}
-                        <div className="flex items-center justify-center mt-3">
-                            <div className="border-t border-primary/20 w-20"></div>
-                            <div className="mx-4 text-primary/40">✦</div>
-                            <div className="border-t border-primary/20 w-20"></div>
-                        </div>
-                    </div>
+      {/* Illustration - */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-10 z-10">
+        <img
+          src={universalIllustration}
+          alt="StyleDeocor Illustration"
+          className="w-full max-w-3xl h-auto object-contain drop-shadow-2xl animate-float-slow"
+        />
+      </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
-                        {/* Email */}
-                        <div>
-                            <label className="label">
-                                <span className="label-text font-medium">Email</span>
-                            </label>
-                            <input
-                                type="email"
-                                {...register('email', { required: true })}
-                                
-                                placeholder="your@email.com"
-                                className="input input-bordered w-full"
-                            />
-                            {errors.email && <p className="text-error text-sm mt-1">Email is required</p>}
-                        </div>
+      {/* Form side */}
+      <div className="flex-1 flex items-center justify-center px-5 py-10 lg:py-0 lg:px-8 z-20">
+        <div className="w-full max-w-lg bg-white/70 backdrop-blur-xl border border-secondary rounded-3xl p-8 md:p-10 shadow-2xl">
 
-                        {/* Password */}
-                        <div>
-                            <label className="label">
-                                <span className="label-text font-medium">Password</span>
-                            </label>
-                            <input
-                                type="password"
-                                {...register('password', { required: true, minLength: 6 })}
-                                placeholder="••••••••"
-                                className="input input-bordered w-full"
-                            />
-                            {errors.password?.type === 'minLength' && (
-                                <p className="text-error text-sm mt-1">Password must be 6 characters or longer</p>
-                            )}
-                            {errors.password?.type === 'required' && (
-                                <p className="text-error text-sm mt-1">Password is required</p>
-                            )}
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                            <button
-                                type="button"
-                                onClick={handleForgetPassword}
-                                disabled={loading}
-                                className={`link link-hover text-secondary hover:text-secondary/80 text-sm '}`}
-                            >
-                                 'Forget password?'
-                            </button>
-
-                        </div>
-
-                        <button type="submit" className="btn btn-primary w-full mt-4 text-white">
-                            Login
-                        </button>
-                    </form>
-                    {
-                        err && <p className='text-red-500'> {err}</p>
-                    }
-
-                    {/* Register link */}
-                    <p className="text-center mt-6 text-base-content/70">
-                        New to StyleDecor?{' '}
-                        <Link
-                            to="/register"
-                            state={location.state}
-                            className="link link-hover text-secondary font-medium hover:text-secondary/80"
-                        >
-                            Create an Account
-                        </Link>
-                    </p>
-
-                    {/* Social Login */}
-                    <SocialLogin />
-                </div>
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex justify-center items-center gap-3 mb-3">
+              <Logo></Logo>
+              
             </div>
+            <p className="text-gray-600 text-lg">Welcome Back</p>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mt-5 rounded-full"></div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-6">
+
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+              <div className="relative">
+                <input
+                  type="email"
+                  {...register('email', { required: "Email is required" })}
+                  placeholder="Jordan@gmail.com"
+                  className="w-full px-5 py-3.5 pl-10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                />
+
+              </div>
+              {errors.email && <p className="text-red-500 text-sm mt-1.5">{errors.email.message}</p>}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register('password', { required: true, minLength: { value: 6, message: "At least 6 characters" } })}
+                  placeholder="••••••••"
+                  className="w-full px-5 py-3.5 pl-10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                />
+                <Button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-secondary"
+                >
+                 {showPassword ? (
+                                     <FiEyeOff className="w-5 h-5" />
+                                   ) : (
+                                     <FiEye className="w-5 h-5" />
+                                   )}
+                </Button>
+              </div>
+              {errors.password && <p className="text-red-500 text-sm mt-1.5">{errors.password.message}</p>}
+            </div>
+
+            {/* Forgot password */}
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={handleForgetPassword}
+                disabled={loading}
+                className="text-sm text-secondary hover:text-secondary hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+
+            {/* Login Button */}
+            <Button
+              type="submit"
+              disabled={loading} className='w-full bg-primary text-white py-3 rounded-2xl'
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </Button>
+          </form>
+
+          {err && <p className="text-red-500 text-center mt-5">{err}</p>}
+
+          {/* Register link */}
+          <p className="text-center text-gray-600 mt-8">
+            Don’t have an account?{" "}
+            <Link to="/register" className="text-secondary font-semibold hover:underline">
+              Sign Up
+            </Link>
+          </p>
+
+          {/* OR divider */}
+          <div className="flex items-center my-8">
+            <div className="flex-1 h-px bg-gray-300"></div>
+            <span className="px-4 text-sm text-gray-500">OR</span>
+            <div className="flex-1 h-px bg-gray-300"></div>
+          </div>
+
+          <SocialLogin />
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Login;

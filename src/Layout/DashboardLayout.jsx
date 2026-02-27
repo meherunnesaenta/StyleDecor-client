@@ -6,6 +6,7 @@ import useRole from '../hooks/useRole';
 import useAuth from '../hooks/useAuth';
 // import useAxiosSecure from '../hooks/useAxiosSecure'; // Removed as unused
 import BecomeDecoratorModal from '../components/Seller/BecomeDecoratorModal';
+import { Logo } from '../components/Logo/Logo';
 
 const DashboardLayout = () => {
     const { role } = useRole();
@@ -51,7 +52,7 @@ const DashboardLayout = () => {
                                 <path d="M14 10l2 2l-2 2"></path>
                             </svg>
                         </label>
-                        <div className="px-4 text-xl font-bold text-primary flex ">StyleDecor Dashboard <div className='text-green-500 pl-3'>{role}</div></div>
+                        <div className="px-4 text-xl font-bold text-primary flex "><Logo></Logo>  <div className='text-green-500 pl-3'>{role}</div><div>-Dashboard</div></div>
                     </nav>
                     {/* Page content here */}
                     <Outlet />

@@ -34,8 +34,7 @@ const SocialLogin = () => {
     }
 
     return (
-        <div className='text-center pb-8'>
-            <p className='mb-2'>OR</p>
+        <div className='text-center'>
             <button
                 onClick={handleGoogleSignIn}
                 className="btn bg-white text-black border-[#e5e5e5]">
