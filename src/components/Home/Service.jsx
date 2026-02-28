@@ -116,7 +116,7 @@ const Service = () => {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className='mb-8 space-y-4'>
+      <div className='mb-8 -mt-3 space-y-4'>
         {/* Search Input */}
         <div className='relative max-w-2xl mx-auto'>
           <FiSearch className='absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400' />

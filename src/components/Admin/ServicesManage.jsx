@@ -96,7 +96,7 @@ const ServicesManage = () => {
       {/* Edit Form Modal */}
       {editingService && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-base p-8 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold mb-6">Edit Service</h2>
             <form onSubmit={handleUpdate}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -166,24 +166,24 @@ const ServicesManage = () => {
       )}
 
       {/* Services Table */}
-      <div className="overflow-x-auto bg-white rounded-xl shadow-lg">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto bg-base rounded-xl shadow-lg">
+        <table className="min-w-full divide-y divide-base">
+          <thead className="bg-base">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost (BDT)</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mode</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base uppercase tracking-wider">Cost (BDT)</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base uppercase tracking-wider">Mode</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-base uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-base divide-y divide-base">
             {services.map((service) => (
-              <tr key={service._id} className="hover:bg-gray-50">
+              <tr key={service._id} className="hover:bg-base">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{service.service_name}</div>
+                  <div className="text-sm font-medium text-base">{service.service_name}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">৳{service.cost}</div>
+                  <div className="text-sm text-base">৳{service.cost}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -215,7 +215,7 @@ const ServicesManage = () => {
       </div>
 
       {services.length === 0 && !isLoading && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-base">
           No services found. Add some services first.
         </div>
       )}

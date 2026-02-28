@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router';
 import { imageUpload } from '../../Utils';
 import Loading from '../Loading/Loading';
 import ErrorPage from '../../Pages/Error/ErrorPage';
+import Heading from '../Shared/Heading';
 
 const AddServiceForm = () => {
 
@@ -23,7 +24,7 @@ const AddServiceForm = () => {
     mutateAsync,
     reset: mutationReset,
   } = useMutation({
-    mutationFn: async (payload) => 
+    mutationFn: async (payload) =>
       await axiosSecure.post('/service', payload),
     onSuccess: (data) => {
       toast.success('Decoration service added successfully! 🎉');
@@ -46,37 +47,37 @@ const AddServiceForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const { 
-      service_name, 
-      cost, 
-      unit, 
-      category, 
-      description, 
+    const {
+      service_name,
+      cost,
+      unit,
+      category,
+      description,
       estimated_time,
-      serviceMode, 
-      image 
+      serviceMode,
+      image
     } = data;
-    
+
     const imageFile = image[0];
     try {
       const imageUrl = await imageUpload(imageFile);
-      
-     
+
+
       const serviceData = {
-        
+
         service_name,
         cost: Number(cost),
         unit,
         category,
         description,
         createdByEmail: user?.email,
-        
-        
-        serviceMode, 
-        
+
+
+        serviceMode,
+
         estimated_time,
         image: imageUrl,
-        
+
         // System Fields
         createdAt: new Date(),
         isActive: true,
@@ -84,7 +85,7 @@ const AddServiceForm = () => {
         rating: 0,
         totalBookings: 0
       };
-      
+
 
       await mutateAsync(serviceData);
       reset();
@@ -95,26 +96,29 @@ const AddServiceForm = () => {
   };
 
   if (isPending) return <Loading />;
-  if (isError) return <ErrorPage/>;
+  if (isError) return <ErrorPage />;
 
   return (
-    <div className='w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50 p-6'>
+    <div className='w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-base rounded-xl bg-base p-6'>
       <div className='w-full max-w-4xl'>
-        <h2 className='text-3xl font-bold text-center mb-8 text-primary'>
-          Add New Decoration Service
-        </h2>
-        
+        <Heading
+          title="Add New Decoration Service"
+          subtitle="Post from here the existing decoration services"
+          center={true}
+        />
+
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
             {/* Left Column */}
             <div className='space-y-6'>
               {/* Service Name */}
               <div className='space-y-2'>
-                <label htmlFor='service_name' className='block text-gray-700 font-medium'>
+                <label htmlFor='service_name' className='block text-base font-medium'>
                   Service Name *
                 </label>
                 <input
-                  className='w-full px-4 py-3 text-gray-800 border border-primary focus:outline-primary rounded-lg bg-white'
+                  className='w-full px-4 py-3 text-base border border-primary focus:outline-primary rounded-lg bg-base'
                   id='service_name'
                   type='text'
                   placeholder='e.g., Wedding Venue Decoration'
@@ -135,13 +139,13 @@ const AddServiceForm = () => {
 
 
               <div className='space-y-2'>
-                <label htmlFor='serviceMode' className='block text-gray-700 font-medium'>
+                <label htmlFor='serviceMode' className='block text-base font-medium'>
                   Service Type *
                 </label>
                 <select
-                  className='w-full px-4 py-3 border border-primary focus:outline-primary rounded-lg bg-white'
-                  {...register('serviceMode', { 
-                    required: 'Service type is required' 
+                  className='w-full px-4 py-3 border border-primary focus:outline-primary rounded-lg bg-base'
+                  {...register('serviceMode', {
+                    required: 'Service type is required'
                   })}
                 >
                   <option value=''>Select Service Type</option>
@@ -157,13 +161,13 @@ const AddServiceForm = () => {
 
               {/* Category */}
               <div className='space-y-2'>
-                <label htmlFor='category' className='block text-gray-700 font-medium'>
+                <label htmlFor='category' className='block text-base font-medium'>
                   Category *
                 </label>
                 <select
-                  className='w-full px-4 py-3 border border-primary focus:outline-primary rounded-lg bg-white'
-                  {...register('category', { 
-                    required: 'Category is required' 
+                  className='w-full px-4 py-3 border border-primary focus:outline-primary rounded-lg bg-base'
+                  {...register('category', {
+                    required: 'Category is required'
                   })}
                 >
                   <option value=''>Select Category</option>
@@ -184,20 +188,20 @@ const AddServiceForm = () => {
               {/* Cost & Unit */}
               <div className='grid grid-cols-2 gap-4'>
                 <div className='space-y-2'>
-                  <label htmlFor='cost' className='block text-gray-700 font-medium'>
+                  <label htmlFor='cost' className='block text-base font-medium'>
                     Cost (BDT) *
                   </label>
                   <input
-                    className='w-full px-4 py-3 text-gray-800 border border-primary focus:outline-primary rounded-lg bg-white'
+                    className='w-full px-4 py-3 text-base border border-primary focus:outline-primary rounded-lg bg-base'
                     id='cost'
                     type='number'
                     min='0'
                     placeholder='e.g., 50000'
                     {...register('cost', {
                       required: 'Cost is required',
-                      min: { 
-                        value: 0, 
-                        message: 'Cost must be positive' 
+                      min: {
+                        value: 0,
+                        message: 'Cost must be positive'
                       },
                     })}
                   />
@@ -209,13 +213,13 @@ const AddServiceForm = () => {
                 </div>
 
                 <div className='space-y-2'>
-                  <label htmlFor='unit' className='block text-gray-700 font-medium'>
+                  <label htmlFor='unit' className='block text-base font-medium'>
                     Unit *
                   </label>
                   <select
-                    className='w-full px-4 py-3 border border-primary focus:outline-primary rounded-lg bg-white'
-                    {...register('unit', { 
-                      required: 'Unit is required' 
+                    className='w-full px-4 py-3 border border-primary focus:outline-primary rounded-lg bg-base'
+                    {...register('unit', {
+                      required: 'Unit is required'
                     })}
                   >
                     <option value=''>Select Unit</option>
@@ -236,11 +240,11 @@ const AddServiceForm = () => {
 
               {/* Estimated Time */}
               <div className='space-y-2'>
-                <label htmlFor='estimated_time' className='block text-gray-700 font-medium'>
+                <label htmlFor='estimated_time' className='block text-base font-medium'>
                   Estimated Time
                 </label>
                 <input
-                  className='w-full px-4 py-3 text-gray-800 border border-primary focus:outline-primary rounded-lg bg-white'
+                  className='w-full px-4 py-3 text-base border border-primary focus:outline-primary rounded-lg bg-base'
                   id='estimated_time'
                   type='text'
                   placeholder='e.g., 3-5 hours, 1 day'
@@ -253,13 +257,13 @@ const AddServiceForm = () => {
             <div className='space-y-6'>
               {/* Description */}
               <div className='space-y-2'>
-                <label htmlFor='description' className='block text-gray-700 font-medium'>
+                <label htmlFor='description' className='block text-base font-medium'>
                   Description *
                 </label>
                 <textarea
                   id='description'
                   rows='4'
-                  className='block rounded-lg w-full px-4 py-3 text-gray-800 border border-primary bg-white focus:outline-primary'
+                  className='block rounded-lg w-full px-4 py-3 text-base border border-primary bg-base focus:outline-primary'
                   placeholder='Describe the service details, what includes, special features...'
                   {...register('description', {
                     required: 'Description is required',
@@ -278,7 +282,7 @@ const AddServiceForm = () => {
 
               {/* Image Upload */}
               <div className='space-y-2'>
-                <label className='block text-gray-700 font-medium'>
+                <label className='block text-base font-medium'>
                   Service Image *
                 </label>
                 <div className='border-2 border-dashed border-secondary rounded-lg p-6 text-center hover:border-primary transition-colors'>
@@ -292,10 +296,10 @@ const AddServiceForm = () => {
                           required: 'Service image is required',
                         })}
                       />
-                      <div className='bg-primary hover:bg-secondary text-white font-medium py-2 px-6 rounded-lg transition-colors'>
+                      <div className='bg-primary hover:bg-secondary text-base font-medium py-2 px-6 rounded-lg transition-colors'>
                         Choose Image
                       </div>
-                      <p className='text-sm text-gray-500 mt-2'>
+                      <p className='text-sm text-base mt-2'>
                         Upload service preview image (JPEG, PNG, WebP)
                       </p>
                     </label>
@@ -313,11 +317,10 @@ const AddServiceForm = () => {
                 <button
                   type='submit'
                   disabled={isPending}
-                  className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors ${
-                    isPending 
-                      ? 'bg-primary cursor-not-allowed' 
+                  className={`w-full py-3 px-4 rounded-lg font-semibold text-base transition-colors ${isPending
+                      ? 'bg-primary cursor-not-allowed'
                       : 'bg-primary hover:bg-secondary'
-                  }`}
+                    }`}
                 >
                   {isPending ? (
                     <span className='flex items-center justify-center'>
@@ -328,8 +331,8 @@ const AddServiceForm = () => {
                     'Add Service'
                   )}
                 </button>
-                
-                <p className='text-sm text-gray-500 mt-3 text-center'>
+
+                <p className='text-sm text-base mt-3 text-center'>
                   * Required fields
                 </p>
               </div>

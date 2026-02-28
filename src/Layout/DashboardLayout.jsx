@@ -52,14 +52,14 @@ const DashboardLayout = () => {
                                 <path d="M14 10l2 2l-2 2"></path>
                             </svg>
                         </label>
-                        <div className="px-4 text-xl font-bold text-primary flex "><Logo></Logo>  <div className='text-green-500 pl-3'>{role}</div><div>-Dashboard</div></div>
+                        <div className="px-4 text-xl font-bold text-primary flex "><Logo></Logo>  <div className='text-green-500 text-sm pl-3'>{role}</div><div className='text-sm'>-Dashboard</div></div>
                     </nav>
                     {/* Page content here */}
                     <Outlet />
                 </div>
 
                 <div className="drawer-side">
-                    <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay !backdrop-blur-none"></label>  {/* Blur রিমুভ করা */}
+                    <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay !backdrop-blur-none"></label> 
                     <div className="flex min-h-full flex-col items-start bg-base-200 w-64 transition-all duration-300 ease-in-out shadow-xl">
                         {/* Sidebar content */}
                         <ul className="menu w-full grow px-2 pt-4">

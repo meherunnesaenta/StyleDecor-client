@@ -123,8 +123,8 @@ const Home = () => {
       </section>
 
 
-      <section className="py-20 md:py-28 bg-base overflow-hidden">
-        <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
+      <section className="py-16 md:py-24 lg:py-28 bg-base overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 
           <Heading
             title="Why Choose StyleDecor"
@@ -132,86 +132,98 @@ const Home = () => {
             center={true}
           />
 
-
-
           <Swiper
             effect={'coverflow'}
             grabCursor={true}
             centeredSlides={true}
             slidesPerView={3}
+            breakpoints={{
+              0: { slidesPerView: 1 },
+              640: { slidesPerView: 1.3 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
             coverflowEffect={{
               rotate: 30,
-              stretch: '50%',
+              stretch: 0,
               depth: 200,
               modifier: 1,
-              scale: 0.75,
+              scale: 0.85,
               slideShadows: true,
             }}
             autoplay={{
               delay: 2500,
               disableOnInteraction: false,
             }}
-            pagination={true}
+            pagination={{ clickable: true }}
             modules={[EffectCoverflow, Pagination, Autoplay]}
-            className="mySwiper"
+            className="mySwiper mt-10 md:mt-14"
           >
             {features.map((feature, index) => (
               <SwiperSlide key={index}>
-                <div className="bg-white
-        rounded-3xl 
-        shadow-xl 
-        p-8 md:p-10 
-        text-center 
-        border border-base
-        transition-all duration-500 
-        hover:shadow-2xl 
-        hover:scale-[1.03] 
-        min-h-[380px] flex flex-col justify-center items-center">
-                  {/* Icon with subtle background */}
+                <div className="
+            bg-white
+            rounded-3xl
+            shadow-xl
+            p-6 sm:p-8 md:p-10
+            text-center
+            border border-base
+            transition-all duration-500
+            hover:shadow-2xl
+            hover:scale-[1.03]
+            min-h-[300px] md:min-h-[380px]
+            flex flex-col justify-center items-center
+          ">
+
+                  {/* Icon */}
                   <div className="
-              w-24 h-24 md:w-32 md:h-32 
-              rounded-full 
-              bg-gradient-to-br from-primary/10 to-secondary/10 
-              flex items-center justify-center 
-              mb-8 
+              w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32
+              rounded-full
+              bg-gradient-to-br from-primary/10 to-secondary/10
+              flex items-center justify-center
+              mb-6 md:mb-8
               shadow-md
             ">
                     {feature.icon}
                   </div>
 
-                  {/* Title & Description */}
-                  <h3 className="text-2xl md:text-3xl font-semibold text-black  mb-5">
+                  {/* Title */}
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 md:mb-5">
                     {feature.title}
                   </h3>
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-md mx-auto">
+
+                  {/* Description */}
+                  <p className="text-sm sm:text-base md:text-xl text-gray-700 leading-relaxed max-w-xs sm:max-w-md mx-auto">
                     {feature.description}
                   </p>
+
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
 
-          {/* CTA below slider */}
-          <div className="text-center mt-12 md:mt-16">
+          {/* CTA */}
+          <div className="text-center mt-10 md:mt-16">
             <Link
               to="/services"
               className="
-          inline-block 
-          bg-primary 
-          text-base 
-          font-semibold 
-          text-lg 
-          px-10 py-5 
-          rounded-full 
-          shadow-lg 
-          hover:bg-primary/90 
-          hover:shadow-xl 
+          inline-block
+          bg-primary
+          font-semibold
+          text-base md:text-lg
+          px-8 md:px-10
+          py-3 md:py-5
+          rounded-full
+          shadow-lg
+          hover:bg-primary/90
+          hover:shadow-xl
           transition-all duration-300
         "
             >
               Explore Our Services
             </Link>
           </div>
+
         </div>
       </section>
     </div>

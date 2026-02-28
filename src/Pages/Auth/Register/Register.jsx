@@ -80,82 +80,76 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-gradient-to-br from-cyan-50 via-blue-100 to-indigo-100 relative overflow-hidden">
-
-      <div className="absolute -top-24 -left-24 w-96 h-96  rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-32 -right-16 w-[600px] h-[600px] bg-blue-400/25 rounded-full blur-3xl"></div>
-      <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-indigo-300/20 rounded-full blur-3xl opacity-70"></div>
-
-      {/* Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-10 z-10">
-        <img
-          src={universalIllustration}
-          alt="StyleDecor Illustration"
-          className="w-full max-w-3xl h-auto object-contain drop-shadow-2xl animate-float-slow"
-        />
-      </div>
-
-      {/* Form side */}
-      <div className="flex-1 flex items-center justify-center px-5 py-10 lg:py-0 lg:px-8 z-20">
-        <div className="w-full max-w-lg bg-white/70 backdrop-blur-xl border border-secondary rounded-3xl p-8 md:p-10 shadow-2xl">
+<div className="min-h-screen flex items-center justify-center bg-base-200 px-4 py-10">
+  <div className="w-full max-w-md sm:max-w-lg bg-base-100 border border-base-300 rounded-2xl shadow-xl p-6 sm:p-8">
 
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center items-center gap-3 mb-3">
+          <div className="text-center mb-4">
+            <div className="flex justify-center items-center">
               <Logo />
             </div>
-            <p className="text-gray-600 text-lg">Create Your Account</p>
-            <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mt-5 rounded-full"></div>
+            <p className="text-base text-sm sm:text-base mt-1">
+              Create Your Account
+            </p>
+            <div className="w-16 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mt-2 rounded-full"></div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(handleRegistration)} className="space-y-6">
+          <form onSubmit={handleSubmit(handleRegistration)} className="space-y-2">
 
             {/* Name */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Full Name</label>
+              <label className="block text-sm font-semibold text-base mb-1">
+                Full Name
+              </label>
               <div className="relative">
                 <input
                   type="text"
                   {...register('name', { required: "Name is required" })}
                   placeholder="Jordi"
-                  className="w-full px-5 py-3.5 pl-10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                  className="w-full px-3 py-2 pl-9 border  rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
                 />
-                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-base w-4 h-4" />
               </div>
-              {errors.name && <p className="text-red-500 text-sm mt-1.5">{errors.name.message}</p>}
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
             </div>
 
             {/* Profile Photo */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Profile Photo</label>
+              <label className="block text-sm font-semibold text-base mb-1">
+                Profile Photo
+              </label>
               <input
-                type="file" 
+                type="file"
                 {...register('photo', { required: "Profile photo is required" })}
-                className="file-input file-input-bordered w-full rounded-xl  bg-pink-100 border-gray-300 focus:ring-2 focus:ring-secondary"
+                className="file-input file-input-bordered w-full rounded-xl bg-secondary/10  h-10"
                 accept="image/*"
               />
-              {errors.photo && <p className="text-red-500 text-sm mt-1.5">{errors.photo.message}</p>}
+              {errors.photo && <p className="text-red-500 text-xs mt-1">{errors.photo.message}</p>}
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+              <label className="block text-sm font-semibold text-base mb-1">
+                Email
+              </label>
               <div className="relative">
                 <input
                   type="email"
                   {...register('email', { required: "Email is required" })}
                   placeholder="Jordan@gmail.com"
-                  className="w-full px-5 py-3.5 pl-10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                  className="w-full px-3 py-2 pl-9 border  rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
                 />
-                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-base w-4 h-4" />
               </div>
-              {errors.email && <p className="text-red-500 text-sm mt-1.5">{errors.email.message}</p>}
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+              <label className="block text-sm font-semibold text-base mb-1">
+                Password
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -164,37 +158,37 @@ const Register = () => {
                     minLength: { value: 6, message: "At least 6 characters" },
                   })}
                   placeholder="••••••••"
-                  className="w-full px-5 py-3.5 pl-10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
+                  className="w-full px-3 py-2 pl-9 border  rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all"
                 />
-                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-base w-4 h-4" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-secondary transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base hover:text-secondary"
                 >
                   {showPassword ? (
-                    <FiEyeOff className="w-5 h-5" />
+                    <FiEyeOff className="w-4 h-4" />
                   ) : (
-                    <FiEye className="w-5 h-5" />
+                    <FiEye className="w-4 h-4" />
                   )}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-sm mt-1.5">{errors.password.message}</p>}
+              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
 
-            {err && <p className="text-red-500 text-center mt-4">{err}</p>}
+            {err && <p className="text-red-500 text-center text-xs mt-1">{err}</p>}
 
             {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full bg-primary text-white py-3 rounded-2xl font-semibold"
+              className="w-full bg-primary text-base py-2 rounded-2xl text-sm font-semibold"
             >
               Create Account
             </Button>
           </form>
 
           {/* Login link */}
-          <p className="text-center text-gray-600 mt-8">
+          <p className="text-center text-base text-sm mt-3">
             Already have an account?{" "}
             <Link to="/login" className="text-secondary font-semibold hover:underline">
               Sign In
@@ -202,16 +196,16 @@ const Register = () => {
           </p>
 
           {/* OR divider */}
-          <div className="flex items-center my-8">
-            <div className="flex-1 h-px bg-gray-300"></div>
-            <span className="px-4 text-sm text-gray-500">OR</span>
-            <div className="flex-1 h-px bg-gray-300"></div>
+          <div className="flex items-center my-3">
+            <div className="flex-1 h-px bg-base"></div>
+            <span className="px-2 text-xs text-base">OR</span>
+            <div className="flex-1 h-px bg-base"></div>
           </div>
 
           <SocialLogin />
         </div>
       </div>
-    </div>
+
   );
 };
 

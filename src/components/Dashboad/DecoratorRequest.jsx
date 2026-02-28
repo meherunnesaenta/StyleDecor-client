@@ -25,18 +25,18 @@ const DecoratorRequests = () => {
 
   const updateDecoratorStatus = async (request, status) => {
     try {
-      const updateInfo = { status:status ,email: request.email };
+      const updateInfo = { status: status, email: request.email };
 
       const res = await axiosSecure.patch(`/decorators/${request._id}`, updateInfo);
 
       if (res.data?.modifiedCount > 0) {
-        await refetch(); 
+        await refetch();
 
         Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: status === 'approved' 
-            ? 'Decorator approved successfully!' 
+          title: status === 'approved'
+            ? 'Decorator approved successfully!'
             : 'Decorator rejected successfully!',
           showConfirmButton: false,
           timer: 1500,
@@ -109,117 +109,121 @@ const DecoratorRequests = () => {
   if (isLoading) return <Loading />;
 
   return (
-<div className="p-6 bg-base-100 rounded-2xl shadow-xl border border-base-200/50">
-  <h2 className="flex justify-center text-2xl font-bold mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent tracking-tight">
-    Decorator Requests Pending Approval: {requests.length}
-  </h2>
+    <div className="p-6 bg-base-100 rounded-2xl shadow-xl border border-base-200/50">
+      <h2 className="flex justify-center text-2xl font-bold mb-8 text-primary tracking-tight">
+        Decorator Requests Pending Approval: {requests.length}
+      </h2>
 
-  <div className="overflow-x-auto rounded-xl border border-base-300/40 shadow-lg">
-    <table className="table table-lg table-zebra w-full">
-      {/* Header */}
-      <thead>
-        <tr className="bg-gradient-to-r from-primary/80 to-secondary/80 text-primary-content">
-          <th className="text-base">#</th>
-          <th className="text-base">Name</th>
-          <th className="text-base">Email</th>
-          <th className="text-base">Phone</th>
-          <th className="text-base">Experience</th>
-          <th className="text-base">Status</th>
-          <th className="text-base text-center">Actions</th>
-        </tr>
-      </thead>
+      <div className="rounded-xl border border-base-300/40 shadow-lg bg-base-100 overflow-hidden">
+        <table className="w-full border-separate md:border-spacing-y-3">
 
-      <tbody className="divide-y divide-base-300/30">
-        {requests.map((request, index) => (
-          <tr
-            key={request._id}
-            className={`
-              group transition-all duration-300 ease-out
-              hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10
-              hover:shadow-lg hover:scale-[1.015] hover:-translate-y-0.5
-              ${index % 2 === 0 ? 'bg-base-200/30' : 'bg-base-100'}
-            `}
-          >
-            <th className="text-primary font-semibold">{index + 1}</th>
-            <td className="font-medium">{request.name || 'N/A'}</td>
-            <td className="text-info">{request.email}</td>
-            <td>{request.phone || 'Not provided'}</td>
-            <td className="text-neutral">
-              {request.experience ? `${request.experience} years` : 'Not specified'}
-            </td>
-            <td>
-              <div
-                className={`
-                  badge badge-lg font-semibold px-4 py-3
-                  ${request.status === 'approved'
-                    ? 'badge-success text-success-content animate-pulse'
-                    : request.status === 'rejected'
-                    ? 'badge-error text-error-content'
-                    : 'badge-warning text-warning-content animate-bounce-slow'
-                  }
-                `}
+          {/* Desktop Header */}
+          <thead className="hidden md:table-header-group">
+            <tr className="bg-primary text-primary-content">
+              <th className="p-4 text-left">#</th>
+              <th className="p-4 text-left">Name</th>
+              <th className="p-4 text-left">Email</th>
+              <th className="p-4 text-left">Phone</th>
+              <th className="p-4 text-left">Experience</th>
+              <th className="p-4 text-left">Status</th>
+              <th className="p-4 text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody className="flex flex-col gap-4 md:table-row-group md:gap-0 p-3 md:p-0">
+            {requests.map((request, index) => (
+              <tr
+                key={request._id}
+                className="
+            flex flex-col md:table-row
+            bg-base-200 md:bg-base-100
+            rounded-xl md:rounded-xl
+            p-4 md:p-0
+            shadow md:shadow-md
+            transition hover:shadow-lg
+          "
               >
-                {request.status
-                  ? request.status.charAt(0).toUpperCase() + request.status.slice(1)
-                  : 'Pending'}
-              </div>
-            </td>
-            <td>
-              <div className="flex items-center justify-center gap-3 flex-wrap">
-                {/* View Details */}
-                <Link
-                  to={`/dashboard/view-decorator/${request._id}`}
-                  className="btn btn-sm btn-outline btn-info tooltip tooltip-bottom glass"
-                  data-tip="View Details"
-                >
-                  <FaEye className="text-lg transition-transform group-hover:scale-110" />
-                </Link>
 
-                {/* Approve */}
-                <button
-                  onClick={() => handleApproval(request)}
-                  className={`
-                    btn btn-sm btn-outline btn-success tooltip tooltip-bottom glass
-                    transition-all duration-300 hover:scale-110 hover:shadow-success/40
-                  `}
-                  data-tip="Approve"
-                  disabled={request.status === 'approved'}
-                >
-                  <FaUserCheck className="text-lg" />
-                </button>
+                <td className="md:table-cell p-2 md:p-4">
+                  <span className="md:hidden font-semibold text-primary">#:</span> {index + 1}
+                </td>
 
-                {/* Reject */}
-                <button
-                  onClick={() => handleRejection(request)}
-                  className={`
-                    btn btn-sm btn-outline btn-error tooltip tooltip-bottom glass
-                    transition-all duration-300 hover:scale-110 hover:shadow-error/40
-                  `}
-                  data-tip="Reject"
-                  disabled={request.status === 'rejected' || request.status === 'approved'}
-                >
-                  <IoPersonRemoveSharp className="text-lg" />
-                </button>
+                <td className="md:table-cell p-2 md:p-4">
+                  <span className="md:hidden font-semibold">Name:</span> {request.name || 'N/A'}
+                </td>
 
-                {/* Delete */}
-                <button
-                  onClick={() => handleDelete(request)}
-                  className={`
-                    btn btn-sm btn-outline btn-error tooltip tooltip-bottom glass
-                    transition-all duration-300 hover:scale-110 hover:shadow-error/50
-                  `}
-                  data-tip="Delete"
-                >
-                  <FaTrashCan className="text-lg" />
-                </button>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
+                <td className="md:table-cell p-2 md:p-4">
+                  <span className="md:hidden font-semibold">Email:</span> {request.email}
+                </td>
+
+                <td className="md:table-cell p-2 md:p-4">
+                  <span className="md:hidden font-semibold">Phone:</span> {request.phone || 'Not provided'}
+                </td>
+
+                <td className="md:table-cell p-2 md:p-4">
+                  <span className="md:hidden font-semibold">Experience:</span>{' '}
+                  {request.experience ? `${request.experience} years` : 'Not specified'}
+                </td>
+
+                <td className="md:table-cell p-2 md:p-4">
+                  <span
+                    className={`badge font-semibold
+                ${request.status === 'approved'
+                        ? 'badge-success'
+                        : request.status === 'rejected'
+                          ? 'badge-error'
+                          : 'badge-warning'
+                      }`}
+                  >
+                    {request.status
+                      ? request.status.charAt(0).toUpperCase() + request.status.slice(1)
+                      : 'Pending'}
+                  </span>
+                </td>
+
+                <td className="md:table-cell p-2 md:p-4">
+                  <div className="flex gap-2 flex-wrap">
+                    <Link
+                      to={`/dashboard/view-decorator/${request._id}`}
+                      className="btn btn-xs btn-outline btn-info"
+                    >
+                      <FaEye />
+                    </Link>
+
+                    <button
+                      onClick={() => handleApproval(request)}
+                      className="btn btn-xs btn-outline btn-success"
+                      disabled={request.status === 'approved'}
+                    >
+                      <FaUserCheck />
+                    </button>
+
+                    <button
+                      onClick={() => handleRejection(request)}
+                      className="btn btn-xs btn-outline btn-error"
+                      disabled={
+                        request.status === 'rejected' ||
+                        request.status === 'approved'
+                      }
+                    >
+                      <IoPersonRemoveSharp />
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(request)}
+                      className="btn btn-xs btn-outline btn-error"
+                    >
+                      <FaTrashCan />
+                    </button>
+                  </div>
+                </td>
+
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 

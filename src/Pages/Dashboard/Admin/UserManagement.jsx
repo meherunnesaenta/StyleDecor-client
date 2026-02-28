@@ -4,6 +4,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FaUserShield } from 'react-icons/fa';
 import { FiShieldOff } from 'react-icons/fi';
 import Swal from 'sweetalert2';
+import Heading from '../../../components/Shared/Heading';
 
 export default function UserManagement() {
   const axiosSecure = useAxiosSecure();
@@ -22,115 +23,115 @@ export default function UserManagement() {
   });
 
   const handleMakeDecorator = (user) => {
-  Swal.fire({
-    title: 'Make decorator?',
-    text: `Are you sure you want to make ${user.displayName || user.name || user.email} a decorator?`,
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, Make Decorator',
-    cancelButtonText: 'Cancel',
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const roleRes = await axiosSecure.patch(`/users/${user._id}/role`, { role: 'decorator' });
+    Swal.fire({
+      title: 'Make decorator?',
+      text: `Are you sure you want to make ${user.displayName || user.name || user.email} a decorator?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Make Decorator',
+      cancelButtonText: 'Cancel',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const roleRes = await axiosSecure.patch(`/users/${user._id}/role`, { role: 'decorator' });
 
-        if (roleRes.data?.modifiedCount > 0) {
-          // ২. decorator collection-এ নতুন approved ডকুমেন্ট পোস্ট করো
-          const decoratorData = {
-            name: user.displayName || user.name || 'Unknown',
-            email: user.email,
-            phone: user.phone || null,
-            experience: 0,
-            portfolio: null,
-            region: null,
-            district: null,
-            specialization: null,
-            bio: null,
-            status: 'approved',
-            workStatus: 'available',
-            appliedAt: new Date(),
-            userId: user.userId || null,
-          };
+          if (roleRes.data?.modifiedCount > 0) {
+            // ২. decorator collection-এ নতুন approved ডকুমেন্ট পোস্ট করো
+            const decoratorData = {
+              name: user.displayName || user.name || 'Unknown',
+              email: user.email,
+              phone: user.phone || null,
+              experience: 0,
+              portfolio: null,
+              region: null,
+              district: null,
+              specialization: null,
+              bio: null,
+              status: 'approved',
+              workStatus: 'available',
+              appliedAt: new Date(),
+              userId: user.userId || null,
+            };
 
-          const createRes = await axiosSecure.post('/decorator/admin-create', decoratorData);
-          console.log('Create decorator response:', createRes.data);
+            const createRes = await axiosSecure.post('/decorator/admin-create', decoratorData);
+            console.log('Create decorator response:', createRes.data);
 
-          if (createRes.data?.success) {
-            refetch();
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: `${user.displayName || user.name || 'User'} is now a decorator!`,
-              showConfirmButton: false,
-              timer: 1800,
-            });
-          } else {
-            throw new Error('Failed to create decorator entry');
+            if (createRes.data?.success) {
+              refetch();
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: `${user.displayName || user.name || 'User'} is now a decorator!`,
+                showConfirmButton: false,
+                timer: 1800,
+              });
+            } else {
+              throw new Error('Failed to create decorator entry');
+            }
           }
-        }
-      } catch (err) {
-        console.error('Make decorator error:', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed',
-          text: err?.response?.data?.message || err.message || 'Something went wrong',
-        });
-      }
-    }
-  });
-};
-
-const handleRemoveDecorator = (user) => {
-  Swal.fire({
-    title: 'Remove Decorator?',
-    text: `Are you sure you want to remove decorator role from ${user.displayName || user.name || user.email}? This will delete their decorator profile.`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Yes, Remove & Delete',
-    cancelButtonText: 'Cancel',
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        // ১. users-এ role 'user' করো
-        const roleRes = await axiosSecure.patch(`/users/${user._id}/role`, { role: 'user' });
-
-        if (roleRes.data?.modifiedCount > 0) {
-          // ২. decorator delete (POST দিয়ে)
-          const deleteRes = await axiosSecure.post('/decorators/delete-by-email', {
-            email: user.email
+        } catch (err) {
+          console.error('Make decorator error:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text: err?.response?.data?.message || err.message || 'Something went wrong',
           });
-
-          console.log('Delete response:', deleteRes.data);
-
-          if (deleteRes.data?.success || deleteRes.data?.deletedCount > 0) {
-            refetch();
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: 'Success!',
-              text: `${user.displayName || user.name || 'User'} is no longer a decorator. Profile deleted.`,
-              showConfirmButton: false,
-              timer: 2000,
-            });
-          } else {
-            throw new Error('Failed to delete decorator profile');
-          }
         }
-      } catch (err) {
-        console.error('Remove decorator error:', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Failed',
-          text: err?.response?.data?.message || err.message || 'Something went wrong',
-        });
       }
-    }
-  });
-};
+    });
+  };
+
+  const handleRemoveDecorator = (user) => {
+    Swal.fire({
+      title: 'Remove Decorator?',
+      text: `Are you sure you want to remove decorator role from ${user.displayName || user.name || user.email}? This will delete their decorator profile.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, Remove & Delete',
+      cancelButtonText: 'Cancel',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // ১. users-এ role 'user' করো
+          const roleRes = await axiosSecure.patch(`/users/${user._id}/role`, { role: 'user' });
+
+          if (roleRes.data?.modifiedCount > 0) {
+            // ২. decorator delete (POST দিয়ে)
+            const deleteRes = await axiosSecure.post('/decorators/delete-by-email', {
+              email: user.email
+            });
+
+            console.log('Delete response:', deleteRes.data);
+
+            if (deleteRes.data?.success || deleteRes.data?.deletedCount > 0) {
+              refetch();
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Success!',
+                text: `${user.displayName || user.name || 'User'} is no longer a decorator. Profile deleted.`,
+                showConfirmButton: false,
+                timer: 2000,
+              });
+            } else {
+              throw new Error('Failed to delete decorator profile');
+            }
+          }
+        } catch (err) {
+          console.error('Remove decorator error:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text: err?.response?.data?.message || err.message || 'Something went wrong',
+          });
+        }
+      }
+    });
+  };
 
   if (isLoading) {
     return (
@@ -142,15 +143,14 @@ const handleRemoveDecorator = (user) => {
 
   return (
     <div className="p-6 md:p-10 bg-base-100 min-h-screen">
+              <Heading
+          title='Manage User'
+          subtitle={`here the showing users(${users.length})`}
+          center={true}
+        />
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h2 className="text-4xl md:text-5xl font-bold text-primary">
-            Manage Users
-          </h2>
-          <p className="text-lg opacity-70 mt-1">
-            Total users: <span className="font-bold">{users.length}</span>
-          </p>
-        </div>
+
+
 
         {/* Search */}
         <label className="input input-bordered flex items-center gap-2 w-full max-w-xs md:max-w-sm shadow-sm">
@@ -176,92 +176,124 @@ const handleRemoveDecorator = (user) => {
         </label>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-base-300 shadow-lg">
-        <table className="table table-zebra table-lg">
-          <thead>
-            <tr className="bg-base-200 text-base-content">
-              <th className="w-12">#</th>
-              <th>User</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th className="text-center">Make/Remove Decorator</th>
-              <th className="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="text-center py-12 text-base-content/60">
-                  No users found matching "{searchText}"
-                </td>
-              </tr>
-            ) : (
-              users.map((user, index) => (
-                <tr key={user._id} className="hover">
-                  <td className="font-medium">{index + 1}</td>
-                  <td>
-                    <div className="flex items-center space-x-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img
-                            src={user.photoURL || 'https://i.ibb.co/5YqB9fF/user.png'}
-                            alt="User avatar"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="font-bold">
-                          {user.displayName || user.name || 'Unknown'}
-                        </div>
-                        <div className="text-sm opacity-60">
-                          {user?.location || 'N/A'}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-info">{user.email}</td>
-                  <td>
-                    <div
-                      className={`badge badge-lg font-semibold ${user.role === 'admin'
-                        ? 'badge-success'
-                        : user.role === 'moderator'
-                          ? 'badge-info'
-                          : 'badge-neutral'
-                        }`}
-                    >
-                      {user.role ? user.role.toUpperCase() : 'USER'}
-                    </div>
-                  </td>
-                  <td className="text-center">
-                    {user.role === 'decorator' ? (
-                      <button
-                        onClick={() => handleRemoveDecorator(user)}
-                        className="btn btn-sm btn-outline btn-error tooltip tooltip-bottom"
-                        data-tip="Remove Decorator"
-                      >
-                        <FiShieldOff className="text-lg" />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleMakeDecorator(user)}
-                        className="btn btn-sm btn-outline btn-success tooltip tooltip-bottom"
-                        data-tip="Make Decorator"
-                      >
-                        <FaUserShield className="text-lg" />
-                      </button>
-                    )}
-                  </td>
-                  <td className="text-center">
-                    <button className="btn btn-sm btn-ghost btn-outline tooltip tooltip-bottom" data-tip="More Actions">
-                      •••
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+<div className="rounded-xl border border-base-300 shadow-lg bg-base-100 overflow-hidden">
+  <table className="w-full border-separate md:border-spacing-y-3">
+    
+    {/* Desktop Header */}
+    <thead className="hidden md:table-header-group">
+      <tr className="bg-base-200 text-base-content">
+        <th className="p-4 w-12">#</th>
+        <th className="p-4 text-left">User</th>
+        <th className="p-4 text-left">Email</th>
+        <th className="p-4 text-left">Role</th>
+        <th className="p-4 text-center">Make/Remove Decorator</th>
+        <th className="p-4 text-center">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody className="flex flex-col gap-4 md:table-row-group md:gap-0 p-4 md:p-0">
+      {users.length === 0 ? (
+        <tr className="bg-base-200 rounded-xl p-6">
+          <td colSpan={6} className="text-center text-base-content/60">
+            No users found matching "{searchText}"
+          </td>
+        </tr>
+      ) : (
+        users.map((user, index) => (
+          <tr
+            key={user._id}
+            className="
+              flex flex-col md:table-row
+              bg-base-200 md:bg-base-100
+              rounded-xl md:rounded-xl
+              shadow md:shadow-md
+              hover:shadow-lg transition
+              p-4 md:p-0
+            "
+          >
+            
+            {/* Index */}
+            <td className="md:table-cell p-2 md:p-4 font-medium">
+              <span className="md:hidden font-semibold text-primary">#:</span>
+              {index + 1}
+            </td>
+
+            {/* User */}
+            <td className="md:table-cell p-2 md:p-4">
+              <span className="md:hidden font-semibold">User:</span>
+              <div className="flex items-center gap-3 mt-1 md:mt-0">
+                <div className="avatar">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden">
+                    <img
+                      src={user.photoURL || "https://i.ibb.co/5YqB9fF/user.png"}
+                      alt="User avatar"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <div className="font-bold">
+                    {user.displayName || user.name || "Unknown"}
+                  </div>
+                  <div className="text-sm text-base-content/60">
+                    {user?.location || "N/A"}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            {/* Email */}
+            <td className="md:table-cell p-2 md:p-4 text-info break-all">
+              <span className="md:hidden font-semibold">Email:</span>
+              {user.email}
+            </td>
+
+            {/* Role */}
+            <td className="md:table-cell p-2 md:p-4">
+              <span
+                className={`badge badge-lg font-semibold ${
+                  user.role === "admin"
+                    ? "badge-success"
+                    : user.role === "moderator"
+                    ? "badge-info"
+                    : "badge-neutral"
+                }`}
+              >
+                {user.role ? user.role.toUpperCase() : "USER"}
+              </span>
+            </td>
+
+            {/* Make / Remove Decorator */}
+            <td className="md:table-cell p-2 md:p-4 text-center">
+              {user.role === "decorator" ? (
+                <button
+                  onClick={() => handleRemoveDecorator(user)}
+                  className="btn btn-sm btn-outline btn-error"
+                >
+                  <FiShieldOff className="text-lg" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleMakeDecorator(user)}
+                  className="btn btn-sm btn-outline btn-success"
+                >
+                  <FaUserShield className="text-lg" />
+                </button>
+              )}
+            </td>
+
+            {/* Actions */}
+            <td className="md:table-cell p-2 md:p-4 text-center">
+              <button className="btn btn-sm btn-outline">
+                •••
+              </button>
+            </td>
+
+          </tr>
+        ))
+      )}
+    </tbody>
+  </table>
+</div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Heading from '../Shared/Heading'; // তোমার existing Heading component
 import { Link } from 'react-router';
+import Button from '../Shared/Button/Button';
 
 const About = () => {
   return (
@@ -35,27 +36,27 @@ const About = () => {
         {/* Our Story */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
           <div className="order-2 lg:order-1">
-            <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+            <h3 className="text-3xl md:text-4xl font-bold text-base mb-6">
               Our <span className="text-primary">Story</span>
             </h3>
-            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+            <p className="text-lg text-base mb-6 leading-relaxed">
               Founded in 2020, StyleDecor started with a simple mission: to make professional interior decoration accessible to everyone in Bangladesh.
             </p>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+            <p className="text-lg text-base mb-8 leading-relaxed">
               Today, we are proud to be one of the leading decoration service providers, serving thousands of happy clients across major cities with our on-site and in-studio services.
             </p>
             <div className="grid grid-cols-3 gap-6 text-center">
-              <div className="bg-primary/10 rounded-2xl p-6 hover:bg-primary hover:text-white transition-all duration-500">
-                <div className="text-4xl font-bold text-primary group-hover:text-white">5000+</div>
-                <p className="text-gray-600 group-hover:text-white mt-2">Happy Clients</p>
+              <div className="bg-primary/10 rounded-2xl p-6 hover:bg-primary hover:text-base transition-all duration-500">
+                <div className="text-4xl font-bold text-secondary group-hover:text-base">5000+</div>
+                <p className="text-base group-hover:text-base mt-2">Happy Clients</p>
               </div>
-              <div className="bg-secondary/10 rounded-2xl p-6 hover:bg-secondary hover:text-white transition-all duration-500">
-                <div className="text-4xl font-bold text-secondary group-hover:text-white">200+</div>
-                <p className="text-gray-600 group-hover:text-white mt-2">Completed Projects</p>
+              <div className="bg-secondary/10 rounded-2xl p-6 hover:bg-secondary hover:text-base transition-all duration-500">
+                <div className="text-4xl font-bold text-primary group-hover:text-base">200+</div>
+                <p className="text-base group-hover:text-base mt-2">Completed Projects</p>
               </div>
-              <div className="bg-primary/10 rounded-2xl p-6 hover:bg-primary hover:text-white transition-all duration-500">
-                <div className="text-4xl font-bold text-primary group-hover:text-white">50+</div>
-                <p className="text-gray-600 group-hover:text-white mt-2">Expert Decorators</p>
+              <div className="bg-primary/10 rounded-2xl p-6 hover:bg-primary hover:text-base transition-all duration-500">
+                <div className="text-4xl font-bold text-secondary group-hover:text-base">50+</div>
+                <p className="text-base group-hover:text-base mt-2">Expert Decorators</p>
               </div>
             </div>
           </div>
@@ -71,31 +72,30 @@ const About = () => {
 
         {/* Our Values */}
         <div className="mb-20">
-          <h3 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+          <h3 className="text-3xl md:text-4xl font-bold text-center text-base mb-12">
             Our <span className="text-secondary">Core Values</span>
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="bg-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-t-8 border-primary">
-              <div className="text-6xl mb-6 text-primary">🎨</div>
-              <h4 className="text-2xl font-bold text-gray-800 mb-4">Creativity</h4>
-              <p className="text-gray-600">
+            <div className="bg-base rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-t-8 border-primary">
+              
+              <h4 className="text-2xl font-bold text-base mb-4">Creativity</h4>
+              <p className="text-base">
                 Every design is unique, crafted with innovation and attention to detail
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-t-8 border-secondary">
-              <div className="text-6xl mb-6 text-secondary">⭐</div>
-              <h4 className="text-2xl font-bold text-gray-800 mb-4">Quality</h4>
+            <div className="bg-base rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-t-8 border-secondary">
+              <h4 className="text-2xl font-bold text-base mb-4">Quality</h4>
               <p className="text-gray-600">
                 Premium materials and expert craftsmanship in every project
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-t-8 border-primary">
-              <div className="text-6xl mb-6 text-primary">🤝</div>
-              <h4 className="text-2xl font-bold text-gray-800 mb-4">Trust</h4>
-              <p className="text-gray-600">
+            <div className="bg-base rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 border-t-8 border-primary">
+
+              <h4 className="text-2xl font-bold text-base mb-4">Trust</h4>
+              <p className="text-base">
                 Transparent pricing, timely delivery, and complete customer satisfaction
               </p>
             </div>
@@ -103,7 +103,7 @@ const About = () => {
         </div>
 
         {/* CTA */}
-        <div className="text-center bg-gradient-to-br from-primary to-secondary rounded-3xl p-12 md:p-16 shadow-2xl text-white">
+        <div className="text-center rounded-3xl p-12 md:p-16 shadow-2xl text-base">
           <h3 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Create Something Extraordinary?
           </h3>
@@ -112,9 +112,9 @@ const About = () => {
           </p>
           <Link
             to="/services"
-            className="inline-block bg-white text-primary font-semibold text-xl px-12 py-5 rounded-full shadow-lg hover:bg-gray-100 hover:scale-105 transition-all duration-300"
+            
           >
-            Schedule Your Consultation
+            <Button>Schedule Your Consultation</Button>
           </Link>
         </div>
       </div>

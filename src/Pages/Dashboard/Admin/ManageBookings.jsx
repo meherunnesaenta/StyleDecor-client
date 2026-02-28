@@ -100,98 +100,138 @@ const handleAssignDecorator = async (decorator) => {
   }
 
   return (
-    <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
+    <div className="p-6 md:p-10 bg-base min-h-screen">
       <Heading
         title={`Manage Bookings (${bookings.length})`}
         subtitle="Oversee all bookings and assign decorators"
       />
 
-      <div className="overflow-x-auto bg-white rounded-2xl shadow-lg mt-8 border border-base-200">
-        <table className="table table-zebra table-lg">
-          <thead className="bg-gradient-to-r from-primary to-secondary text-white">
-            <tr>
-              <th>#</th>
-              <th>Customer</th>
-              <th>Service</th>
-              <th>Date</th>
-              <th>Location</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Work Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+<div className="bg-base-100 rounded-2xl shadow-lg mt-8 border border-base-200 overflow-hidden">
+  <table className="w-full border-separate md:border-spacing-y-3">
+    
+    {/* Desktop Header */}
+    <thead className="hidden md:table-header-group bg-primary text-white">
+      <tr>
+        <th className="p-4 text-left">#</th>
+        <th className="p-4 text-left">Customer</th>
+        <th className="p-4 text-left">Service</th>
+        <th className="p-4 text-left">Date</th>
+        <th className="p-4 text-left">Location</th>
+        <th className="p-4 text-left">Amount</th>
+        <th className="p-4 text-left">Status</th>
+        <th className="p-4 text-left">Work Status</th>
+        <th className="p-4 text-left">Action</th>
+      </tr>
+    </thead>
 
-          <tbody>
-            {bookings.length === 0 ? (
-              <tr>
-                <td colSpan={9} className="text-center py-12 text-gray-500">
-                  No bookings found
-                </td>
-              </tr>
-            ) : (
-              bookings.map((b, index) => (
-                <tr key={b._id} className="hover">
-                  <td>{index + 1}</td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="font-semibold">{b.customerName || "Guest"}</span>
-                      <span className="text-xs text-gray-500">{b.customerEmail}</span>
-                    </div>
-                  </td>
-                  <td className="font-medium">{b.serviceName}</td>
-                  <td>{new Date(b.bookingDate).toLocaleDateString()}</td>
-                  <td>{b.location || "N/A"}</td>
-                  <td className="font-bold text-green-600">
-                    ${Number(b.paidAmountUSD || 0).toFixed(2)}
-                  </td>
-                  <td>
-                    <span
-                      className={`badge badge-lg ${b.status === "paid" || b.status === "assigned"
-                          ? "badge-success"
-                          : b.status === "pending"
-                            ? "badge-warning"
-                            : "badge-error"
-                        }`}
+    <tbody className="flex flex-col gap-4 md:table-row-group md:gap-0 p-4 md:p-0">
+      {bookings.length === 0 ? (
+        <tr className="md:table-row bg-base-200 rounded-xl md:rounded-none p-6">
+          <td colSpan={9} className="text-center text-base">
+            No bookings found
+          </td>
+        </tr>
+      ) : (
+        bookings.map((b, index) => (
+          <tr
+            key={b._id}
+            className="
+              flex flex-col md:table-row
+              bg-base-200 md:bg-base-100
+              rounded-xl md:rounded-xl
+              shadow md:shadow-md
+              hover:shadow-lg transition
+              p-4 md:p-0
+            "
+          >
+            
+            <td className="md:table-cell p-2 md:p-4">
+              <span className="md:hidden font-semibold text-primary">#:</span> {index + 1}
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4">
+              <span className="md:hidden font-semibold">Customer:</span>
+              <div className="flex flex-col">
+                <span className="font-semibold">{b.customerName || "Guest"}</span>
+                <span className="text-xs text-base-content/70">{b.customerEmail}</span>
+              </div>
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4 font-medium">
+              <span className="md:hidden font-semibold">Service:</span> {b.serviceName}
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4">
+              <span className="md:hidden font-semibold">Date:</span>{" "}
+              {new Date(b.bookingDate).toLocaleDateString()}
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4">
+              <span className="md:hidden font-semibold">Location:</span>{" "}
+              {b.location || "N/A"}
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4 font-bold text-green-600">
+              <span className="md:hidden font-semibold">Amount:</span> $
+              {Number(b.paidAmountUSD || 0).toFixed(2)}
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4">
+              <span
+                className={`badge badge-lg ${
+                  b.status === "paid" || b.status === "assigned"
+                    ? "badge-success"
+                    : b.status === "pending"
+                    ? "badge-warning"
+                    : "badge-error"
+                }`}
+              >
+                {b.status?.toUpperCase() || "Pending"}
+              </span>
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4">
+              <span
+                className={`btn btn-sm font-semibold ${
+                  b.workStatus === "assigned"
+                    ? "btn-info"
+                    : b.workStatus === "in-progress"
+                    ? "btn-warning"
+                    : b.workStatus === "completed"
+                    ? "btn-success"
+                    : "btn-neutral"
+                }`}
+              >
+                {b.workStatus ? b.workStatus.toUpperCase() : "Not Started"}
+              </span>
+            </td>
+
+            <td className="md:table-cell p-2 md:p-4">
+              <div className="flex flex-wrap gap-2">
+                {(b.status === "paid" || b.status === "pending") &&
+                  !b.decoratorId && (
+                    <button
+                      onClick={() => openAssignDecoratorModal(b)}
+                      className="btn btn-sm btn-primary"
                     >
-                      {b.status?.toUpperCase() || "Pending"}
-                    </span>
-                  </td>
-                  <td>
-                    {/* Work Status badge */}
-                    <span
-                      className={`btn btn-lg font-semibold ${b.workStatus === "assigned" ? "btn-info" :
-                          b.workStatus === "in-progress" ? "btn-warning" :
-                            b.workStatus === "completed" ? "btn-success" :
-                              "btn-neutral"
-                        }`}
-                    >
-                      {b.workStatus ? b.workStatus.toUpperCase() : "Not Started"}
-                    </span>
-                  </td>
-                  <td className="space-x-2">
+                      Assign Decorator
+                    </button>
+                  )}
 
-                    {(b.status === "paid" || b.status === "pending") && !b.decoratorId && (
-                      <button
-                        onClick={() => openAssignDecoratorModal(b)}
-                        className="btn  btn-primary"
-                      >
-                        Assign Decorator
-                      </button>
-                    )}
+                {b.decoratorId && (
+                  <span className="badge badge-info">
+                    Assigned: {b.decoratorName || "Decorator"}
+                  </span>
+                )}
+              </div>
+            </td>
 
-                    {b.decoratorId && (
-                      <span className="badge badge-info">
-                        Assigned: {b.decoratorName || "Decorator"}
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+          </tr>
+        ))
+      )}
+    </tbody>
+  </table>
+</div>
 
       {/* Assign Decorator Modal */}
       <dialog ref={decoratorModalRef} className="modal modal-bottom sm:modal-middle">

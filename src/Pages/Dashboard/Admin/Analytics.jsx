@@ -2,11 +2,11 @@ import axios from 'axios';
 import { useEffect } from 'react';
 
 import { useNavigate } from 'react-router';
-import { getAuth } from 'firebase/auth'; // ← এটা import করো
+import { getAuth } from 'firebase/auth'; 
 import useAuth from '../../../hooks/useAuth';
 
 const axiosSecure = axios.create({
-  baseURL: 'https://zap-shift-server-phi.vercel.app', // production URL
+  baseURL: 'https://zap-shift-server-phi.vercel.app', 
   withCredentials: true,
 });
 

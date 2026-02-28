@@ -115,7 +115,7 @@ const Navbar = () => {
             className={({ isActive }) =>
               `btn btn-sm sm:btn-md ${
                 isActive
-                  ? 'btn-primary text-white'
+                  ? 'btn-primary text-base'
                   : 'btn-outline btn-primary'
               } hidden sm:flex items-center gap-2`
             }
@@ -157,15 +157,15 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content menu p-3 shadow-2xl bg-white rounded-xl w-60 mt-3 border border-gray-100/80"
+              className="dropdown-content menu p-3 shadow-2xl bg-primary/90 rounded-xl w-60 mt-3 border"
             >
-              <li className="px-4 py-2 text-center font-medium text-gray-800 border-b">
+              <li className="px-4 py-2 text-center font-medium text-white border-b">
                 {user.displayName || 'User'}
               </li>
               <li>
                 <NavLink
                   to="/dashboard"
-                  className="text-sm py-2.5 hover:bg-primary/10"
+                  className="text-sm text-white py-2.5 hover:bg-base"
                 >
                   My Dashboard
                 </NavLink>
@@ -173,7 +173,7 @@ const Navbar = () => {
               <li>
                 <button
                   onClick={handleLogout}
-                  className="text-sm text-red-600 hover:bg-red-50 py-2.5"
+                  className="text-sm text-red-600 hover:bg-base py-2.5"
                 >
                   Logout
                 </button>
