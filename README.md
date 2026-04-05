@@ -4,6 +4,7 @@ A smart full-stack web application for booking and managing home and ceremony de
 
 🌐 **Live Website**
 Client: https://cheery-cranachan-6e2445.netlify.app/
+
 Server: https://style-decor-server-xi.vercel.app
 
 ---
