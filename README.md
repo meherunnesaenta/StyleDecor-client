@@ -1,4 +1,4 @@
-# 🎨 StyleDecor
+# StyleDecor
 
 A smart full-stack web application for booking and managing home and ceremony decoration services. It enables users to book services, admins to manage operations, and decorators to handle assigned projects efficiently.
 
